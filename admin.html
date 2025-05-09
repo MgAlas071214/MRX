@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Online Food Ordering System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <style>
+        body { background: #f8f9fa; }
+        .admin-sidebar {
+            background: #1e1e2f;
+            color: #fff;
+            min-height: 100vh;
+            width: 220px;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 100;
+            transition: left 0.3s;
+        }
+        .admin-sidebar .logo {
+            text-align: center;
+            padding: 1.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #333;
+        }
+        .admin-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0 0 0;
+        }
+        .admin-sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: #ccc;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .admin-sidebar ul li a.active, .admin-sidebar ul li a:hover {
+            background: #33334d;
+            color: #fff;
+        }
+        .admin-sidebar ul li a i { margin-right: 10px; }
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            transition: margin 0.3s;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logout-btn {
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .logout-btn:hover { background: #e74c3c; }
+        .sidebar-toggle {
+            display: none;
+        }
+        @media (max-width: 900px) {
+            .admin-sidebar { left: -220px; }
+            .admin-sidebar.show { left: 0; }
+            .main-content { margin-left: 0; }
+            .sidebar-toggle {
+                display: block;
+                position: fixed;
+                top: 15px; left: 15px;
+                z-index: 200;
+            }
+        }
+        .table img { border-radius: 6px; }
+        .approve-btn {
+            background: #2ecc71;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .approve-btn:hover { background: #27ae60; }
+        .badge-success { background: #2ecc71; }
+        .badge-pending { background: #f39c12; }
+        .modal .form-label { font-weight: 500; }
+        @media (max-width: 600px) {
+            .main-content { padding: 1rem 0.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div class="container" id="adminLoginSection" style="max-width:400px; margin:60px auto;">
+        <div class="text-center mb-4">
+            <img src="logo.png" alt="Logo" style="max-width:120px;">
+        </div>
+        <div class="card p-4 shadow">
+            <h3 class="mb-3 text-center">Admin Login</h3>
+            <form id="adminLoginForm" autocomplete="off">
+                <div class="mb-3">
+                    <label for="adminUsername" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="adminUsername" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="adminPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="adminPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <div id="loginError" class="text-danger mt-3" style="display:none;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <button class="btn btn-outline-secondary sidebar-toggle d-lg-none" id="sidebarToggle" style="display:none;">
+        <i class="uil uil-bars"></i>
+    </button>
+    <div class="admin-sidebar" id="adminSidebar" style="display:none;">
+        <div class="logo">Admin</div>
+        <ul>
+            <li><a href="#" class="active" data-section="dashboard"><i class="uil uil-dashboard"></i> Dashboard</a></li>
+            <li><a href="#" data-section="menu"><i class="uil uil-utensils"></i> Menu Items</a></li>
+            <li><a href="#" data-section="orders"><i class="uil uil-shopping-bag"></i> Orders</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="adminDashboardSection" style="display:none;">
+        <div class="admin-header">
+            <h2 id="sectionTitle">Dashboard</h2>
+            <button class="logout-btn" id="adminLogoutBtn">Logout</button>
+        </div>
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="admin-section">
+            <div class="alert alert-info">Welcome to the Admin Dashboard!</div>
+        </div>
+        <!-- Menu Management Section -->
+        <div id="menuSection" class="admin-section" style="display:none;">
+            <h4>Manage Menu Items</h4>
+            <button class="btn btn-primary mb-3" id="addMenuItemBtn" type="button">Add Menu Item</button>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="menuTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Image</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Orders Section -->
+        <div id="ordersSection" class="admin-section" style="display:none;">
+            <ul class="nav nav-tabs" id="adminTabs">
+                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#pendingOrdersTab">Pending Orders</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#orderHistoryTab">Order History</a></li>
+            </ul>
+            <div class="tab-content mt-4">
+                <!-- Pending Orders -->
+                <div class="tab-pane fade show active" id="pendingOrdersTab">
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle" id="pendingOrdersTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th><th>User</th><th>Items</th><th>Type</th><th>Address</th><th>Payment</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Order History -->
+                <div class="tab-pane fade" id="orderHistoryTab">
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle" id="orderHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th><th>User</th><th>Items</th><th>Type</th><th>Address</th><th>Payment</th><th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for Add/Edit Menu Item -->
+        <div class="modal fade" id="menuItemModal" tabindex="-1" aria-labelledby="menuModalTitle" aria-hidden="true">
+          <div class="modal-dialog">
+            <form class="modal-content" id="menuItemForm">
+              <div class="modal-header">
+                <h5 class="modal-title" id="menuModalTitle">Add Menu Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <input type="hidden" id="menuItemId">
+                <div class="mb-3">
+                  <label class="form-label">Name</label>
+                  <input type="text" class="form-control" id="menuItemName" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Description</label>
+                  <textarea class="form-control" id="menuItemDescription" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Price</label>
+                  <input type="number" class="form-control" id="menuItemPrice" required min="1">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Category</label>
+                  <input type="text" class="form-control" id="menuItemCategory" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Image URL</label>
+                  <input type="text" class="form-control" id="menuItemImage" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                <button class="btn btn-primary" type="submit" id="saveMenuBtn">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // --- Admin Login Logic ---
+    $('#adminLoginForm').submit(function(e) {
+        e.preventDefault();
+        $('#loginError').hide();
+        const username = $('#adminUsername').val().trim();
+        const password = $('#adminPassword').val().trim();
+        if (username === 'admin' && password === 'admin123') {
+            localStorage.setItem('adminLoggedIn', 'true');
+            $('#adminLoginSection').hide();
+            $('#adminSidebar, #sidebarToggle, #adminDashboardSection').show();
+            showSection('dashboard');
+        } else {
+            $('#loginError').text('Invalid username or password.').show();
+        }
+    });
+
+    // --- Show dashboard if already logged in ---
+    $(function() {
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            $('#adminLoginSection').hide();
+            $('#adminSidebar, #sidebarToggle, #adminDashboardSection').show();
+            showSection('dashboard');
+        }
+    });
+
+    // --- Sidebar toggle for mobile ---
+    $('#sidebarToggle').click(function() {
+        $('#adminSidebar').toggleClass('show');
+    });
+
+    // --- Sidebar navigation ---
+    $('#adminSidebar ul li a').click(function(e) {
+        e.preventDefault();
+        $('#adminSidebar ul li a').removeClass('active');
+        $(this).addClass('active');
+        showSection($(this).data('section'));
+    });
+
+    function showSection(section) {
+        $('.admin-section').hide();
+        if (section === 'dashboard') {
+            $('#dashboardSection').show();
+            $('#sectionTitle').text('Dashboard');
+        } else if (section === 'menu') {
+            $('#menuSection').show();
+            $('#sectionTitle').text('Menu Items');
+            renderMenuTable();
+        } else if (section === 'orders') {
+            $('#ordersSection').show();
+            $('#sectionTitle').text('Orders');
+            renderAdminOrders();
+        }
+    }
+
+    // --- Logout ---
+    $('#adminLogoutBtn').click(function() {
+        localStorage.removeItem('adminLoggedIn');
+        $('#adminSidebar, #sidebarToggle, #adminDashboardSection').hide();
+        $('#adminLoginSection').show();
+    });
+
+    // --- MENU MANAGEMENT ---
+    let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+    let editingIndex = null;
+
+    function renderMenuTable() {
+        const tbody = $('#menuTable tbody');
+        tbody.empty();
+        if (menuItems.length === 0) {
+            tbody.append('<tr><td colspan="6" class="text-center text-muted">No menu items yet.</td></tr>');
+        }
+        menuItems.forEach((item, idx) => {
+            tbody.append(`
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.description}</td>
+                    <td>₱${item.price}</td>
+                    <td>${item.category}</td>
+                    <td><img src="${item.image}" width="50"></td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary edit-menu" data-idx="${idx}"><i class="uil uil-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-sm btn-danger delete-menu" data-idx="${idx}"><i class="uil uil-trash"></i> Delete</button>
+                    </td>
+                </tr>
+            `);
+        });
+    }
+    function saveMenuItems() {
+        localStorage.setItem('menuItems', JSON.stringify(menuItems));
+        renderMenuTable();
+    }
+
+    // Add new item
+    $(document).on('click', '#addMenuItemBtn', function() {
+        editingIndex = null;
+        $('#menuModalTitle').text('Add Menu Item');
+        $('#menuItemForm')[0].reset();
+        $('#menuItemId').val('');
+        const modal = new bootstrap.Modal(document.getElementById('menuItemModal'));
+        modal.show();
+    });
+
+    // Edit item
+    $(document).on('click', '.edit-menu', function() {
+        editingIndex = $(this).data('idx');
+        const item = menuItems[editingIndex];
+        $('#menuModalTitle').text('Edit Menu Item');
+        $('#menuItemId').val(item.id);
+        $('#menuItemName').val(item.name);
+        $('#menuItemDescription').val(item.description);
+        $('#menuItemPrice').val(item.price);
+        $('#menuItemCategory').val(item.category);
+        $('#menuItemImage').val(item.image);
+        const modal = new bootstrap.Modal(document.getElementById('menuItemModal'));
+        modal.show();
+    });
+
+    // Delete item
+    $(document).on('click', '.delete-menu', function() {
+        if (confirm('Delete this item?')) {
+            menuItems.splice($(this).data('idx'), 1);
+            saveMenuItems();
+        }
+    });
+
+    // Save (add or edit)
+    $(document).on('submit', '#menuItemForm', function(e) {
+        e.preventDefault();
+        const item = {
+            id: $('#menuItemId').val() || Date.now(),
+            name: $('#menuItemName').val(),
+            description: $('#menuItemDescription').val(),
+            price: parseFloat($('#menuItemPrice').val()),
+            category: $('#menuItemCategory').val(),
+            image: $('#menuItemImage').val()
+        };
+        if (editingIndex !== null) {
+            menuItems[editingIndex] = item;
+        } else {
+            menuItems.push(item);
+        }
+        saveMenuItems();
+        const modalEl = document.getElementById('menuItemModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+        editingIndex = null;
+    });
+
+    // --- ORDER MANAGEMENT ---
+    function renderAdminOrders() {
+        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+        // Pending
+        const pendingOrders = orders.filter(o => o.status === 'pending');
+        const $pendingTbody = $('#pendingOrdersTable tbody');
+        $pendingTbody.empty();
+        if (pendingOrders.length === 0) {
+            $pendingTbody.append('<tr><td colspan="7" class="text-center text-muted">No pending orders.</td></tr>');
+        }
+        pendingOrders.slice().reverse().forEach((order, idx) => {
+            const user = users[order.userEmail] || {};
+            $pendingTbody.append(`
+                <tr>
+                    <td>${order.orderDate ? new Date(order.orderDate).toLocaleString() : ''}</td>
+                    <td>${user.name || order.userEmail}</td>
+                    <td>
+                        <ul>${order.items.map(i => `<li>${i.name} <span style="color:#888;">x${i.quantity}</span></li>`).join('')}</ul>
+                    </td>
+                    <td>${order.orderType ? order.orderType.charAt(0).toUpperCase() + order.orderType.slice(1) : ''}</td>
+                    <td>${order.address || ''}</td>
+                    <td>${order.paymentMethod ? order.paymentMethod.toUpperCase() : ''}</td>
+                    <td>
+                        <button class="approve-btn approve-order" data-idx="${orders.indexOf(order)}">
+                            <i class="uil uil-check"></i> Approve
+                        </button>
+                    </td>
+                </tr>
+            `);
+        });
+
+        // History (approved and others)
+        const historyOrders = orders.filter(o => o.status && o.status !== 'pending');
+        const $historyTbody = $('#orderHistoryTable tbody');
+        $historyTbody.empty();
+        if (historyOrders.length === 0) {
+            $historyTbody.append('<tr><td colspan="7" class="text-center text-muted">No order history yet.</td></tr>');
+        }
+        historyOrders.slice().reverse().forEach(order => {
+            const user = users[order.userEmail] || {};
+            $historyTbody.append(`
+                <tr>
+                    <td>${order.orderDate ? new Date(order.orderDate).toLocaleString() : ''}</td>
+                    <td>${user.name || order.userEmail}</td>
+                    <td>
+                        <ul>${order.items.map(i => `<li>${i.name} <span style="color:#888;">x${i.quantity}</span></li>`).join('')}</ul>
+                    </td>
+                    <td>${order.orderType ? order.orderType.charAt(0).toUpperCase() + order.orderType.slice(1) : ''}</td>
+                    <td>${order.address || ''}</td>
+                    <td>${order.paymentMethod ? order.paymentMethod.toUpperCase() : ''}</td>
+                    <td>
+                        <span class="badge badge-success">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                    </td>
+                </tr>
+            `);
+        });
+    }
+
+    // Approve Order
+    $(document).on('click', '.approve-order', function() {
+        const idx = $(this).data('idx');
+        let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        orders[idx].status = 'approved';
+        localStorage.setItem('orders', JSON.stringify(orders));
+        renderAdminOrders();
+    });
+
+    // Tab navigation: re-render on tab switch
+    $('#adminTabs a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+        renderAdminOrders();
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group 7 - Online Food Ordering System</title>
+    <!-- for icons -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="body-fixed">
+<!-- Start of Header -->
+<header class="site-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-2">
+          <div class="header-logo">
+            <a href="index.html" aria-label="Go to homepage">
+              <img src="logo.png" width="160" height="36" alt="Restaurant Logo">
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-10">
+          <div class="main-navigation">
+            <button class="menu-toggle"><span></span><span></span></button>
+            <nav class="header-menu" aria-label="Main Navigation">
+              <ul class="menu food-nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+            </nav>
+            <div class="header-right">
+              <form action="#" class="header-search-form for-des" role="search">
+                <input type="search" class="form-input" placeholder="Search Here..." aria-label="Search">
+                <button type="submit" aria-label="Search Button">
+                  <i class="uil uil-search"></i>
+                </button>
+              </form>
+              <div class="user-dropdown">
+                <a href="javascript:void(0)" class="header-btn user-btn" aria-label="User Profile">
+                  <i class="uil uil-user-md"></i>
+                </a>
+                <div class="dropdown-content">
+                  <a href="register.html" id="registerLink">Register</a>
+                  <a href="login.html" id="loginLink">Login</a>
+                  <a href="javascript:void(0)" id="logoutLink" style="display:none;">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Header Ends -->
+
+    <div id="viewport">
+        <div id="js-scroll-content">
+            <section class="main-banner" id="home">
+                <div class="js-parallax-scene">
+                    <div class="banner-shape-1 w-100" data-depth="0.30">
+                        <img src="assets/images/berry.png" alt="Berry Decoration">
+                    </div>
+                    <div class="banner-shape-2 w-100" data-depth="0.25">
+                        <img src="assets/images/leaf.png" alt="Leaf Decoration">
+                    </div>
+                </div>
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="banner-text">
+                                    <h1 class="h1-title">
+                                        Welcome to our
+                                        <span>Online</span>
+                                        Food Ordering System.
+                                    </h1>
+                                    <p>Experience exquisite flavors and culinary artistry. Our commitment to quality
+                                        and customer satisfaction ensures a memorable dining experience.</p>
+                                    <div class="banner-btn mt-4">
+                                        <a href="#menu" class="sec-btn">Check our Menu</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="banner-img-wp">
+                                    <div class="banner-img" style="background-image: url(assets/images/main-b.jpg);">
+                                    </div>
+                                </div>
+                                <div class="banner-img-text mt-4 m-auto">
+                                    <h5 class="h5-title">Sushi</h5>
+                                    <p>Discover the delightful taste of our sushi, made with the freshest ingredients.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="brands-sec">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="brand-title mb-5">
+                                <h5 class="h5-title">Trusted by 70+ Companies</h5>
+                            </div>
+                            <div class="brands-row">
+                                <div class="brands-box">
+                                    <img src="assets/images/brands/jollibee.jpg" alt="Brand 1">
+                                </div>
+                                <div class="brands-box">
+                                    <img src="assets/images/brands/mcdo.jpg" alt="Brand 2">
+                                </div>
+                                <div class="brands-box">
+                                    <img src="assets/images/brands/chowking.jpg" alt="Brand 3">
+                                </div>
+                                <div class="brands-box">
+                                    <img src="assets/images/brands/manginasal.jpg" alt="Brand 4">
+                                </div>
+                                <div class="brands-box">
+                                    <img src="assets/images/brands/greenwich.jpg" alt="Brand 5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-sec section" id="about">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sec-title text-center mb-5">
+                                <p class="sec-sub-title mb-3">About Us</p>
+                                <h2 class="h2-title">Discover Our <span>Restaurant Story</span></h2>
+                                <div class="sec-title-shape mb-4">
+                                    <img src="assets/images/title-shape.svg" alt="Title Background Shape">
+                                </div>
+                                <p>We take pride in presenting the unique flavors of Filipino dishes. Our team
+                                    is dedicated to creating dishes that are not only delicious but also
+                                    memorable.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8 m-auto">
+                            <div class="about-video">
+                                <div class="about-video-img" style="background-image: url(assets/images/batilpatong.jpg);">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section style="background-image: url(assets/images/menu-bg.png);" class="our-menu section bg-light repeat-img" id="menu">
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sec-title text-center mb-5">
+                                    <p class="sec-sub-title mb-3">Our Menu</p>
+                                    <h2 class="h2-title">Wake Up Early, <span>Eat Fresh & Healthy</span></h2>
+                                    <div class="sec-title-shape mb-4">
+                                        <img src="assets/images/title-shape.svg" alt="Title Background Shape">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-tab-wp">
+                            <div class="row">
+                                <div class="col-lg-12 m-auto">
+                                    <div class="menu-tab text-center">
+                                        <ul class="filters">
+                                            <div class="filter-active"></div>
+                                            <li class="filter" data-filter=".all, .breakfast, .lunch, .dinner">
+                                                <img src="assets/images/menu-1.png" alt="All Menu">
+                                                All
+                                            </li>
+                                            <li class="filter" data-filter=".breakfast">
+                                                <img src="assets/images/menu-2.png" alt="Breakfast Menu">
+                                                Breakfast
+                                            </li>
+                                            <li class="filter" data-filter=".lunch">
+                                                <img src="assets/images/menu-3.png" alt="Lunch Menu">
+                                                Lunch
+                                            </li>
+                                            <li class="filter" data-filter=".dinner">
+                                                <img src="assets/images/menu-4.png" alt="Dinner Menu">
+                                                Dinner
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-list-row">
+                            <div class="row g-xxl-5 bydefault_show" id="menu-dish">
+                                <div class="col-lg-4 col-sm-6 dish-box-wp breakfast" data-cat="breakfast">
+                                    <div class="dish-box text-center">
+                                        <div class="dist-img">
+                                            <img src="assets/images/dish/1.png" alt="Fresh Chicken Veggies">
+                                        </div>
+                                        <div class="dish-rating">
+                                            5 <i class="uil uil-star"></i>
+                                        </div>
+                                        <div class="dish-title">
+                                            <h3 class="h3-title">Fresh Chicken Veggies</h3>
+                                            <p>120 calories</p>
+                                        </div>
+                                        <div class="dish-info">
+                                            <ul>
+                                                <li>
+                                                    <p>Type</p>
+                                                    <b>Non-Vegetarian</b>
+                                                </li>
+                                                <li>
+                                                    <p>Serves</p>
+                                                    <b>2</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="dist-bottom-row">
+                                            <ul>
+                                                <li>
+                                                    <b>₱499</b>
+                                                </li>
+                                                <li>
+                                                    <button class="dish-add-btn" aria-label="Add to Cart">
+                                                        <i class="uil uil-plus"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 2 -->
+                                <div class="col-lg-4 col-sm-6 dish-box-wp breakfast" data-cat="breakfast">
+                                    <div class="dish-box text-center">
+                                        <div class="dist-img">
+                                            <img src="assets/images/dish/2.png" alt="Grilled Chicken">
+                                        </div>
+                                        <div class="dish-rating">
+                                            4.3 <i class="uil uil-star"></i>
+                                        </div>
+                                        <div class="dish-title">
+                                            <h3 class="h3-title">Grilled Chicken</h3>
+                                            <p>80 calories</p>
+                                        </div>
+                                        <div class="dish-info">
+                                            <ul>
+                                                <li>
+                                                    <p>Type</p>
+                                                    <b>Non-Vegetarian</b>
+                                                </li>
+                                                <li>
+                                                    <p>Serves</p>
+                                                    <b>1</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="dist-bottom-row">
+                                            <ul>
+                                                <li>
+                                                    <b>₱359</b>
+                                                </li>
+                                                <li>
+                                                    <button class="dish-add-btn" aria-label="Add to Cart">
+                                                        <i class="uil uil-plus"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 3 -->
+                                <div class="col-lg-4 col-sm-6 dish-box-wp lunch" data-cat="lunch">
+                                    <div class="dish-box text-center">
+                                        <div class="dist-img">
+                                            <img src="assets/images/dish/3.png" alt="Paneer Noodles">
+                                        </div>
+                                        <div class="dish-rating">
+                                            4 <i class="uil uil-star"></i>
+                                        </div>
+                                        <div class="dish-title">
+                                            <h3 class="h3-title">Paneer Noodles</h3>
+                                            <p>100 calories</p>
+                                        </div>
+                                        <div class="dish-info">
+                                            <ul>
+                                                <li>
+                                                    <p>Type</p>
+                                                    <b>Vegetarian</b>
+                                                </li>
+                                                <li>
+                                                    <p>Serves</p>
+                                                    <b>2</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="dist-bottom-row">
+                                            <ul>
+                                                <li>
+                                                    <b>₱149</b>
+                                                </li>
+                                                <li>
+                                                    <button class="dish-add-btn" aria-label="Add to Cart">
+                                                        <i class="uil uil-plus"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 4 -->
+                                <div class="col-lg-4 col-sm-6 dish-box-wp lunch" data-cat="lunch">
+                                    <div class="dish-box text-center">
+                                        <div class="dist-img">
+                                            <img src="assets/images/dish/4.png" alt="Chicken Noodles">
+                                        </div>
+                                        <div class="dish-rating">
+                                            4.5 <i class="uil uil-star"></i>
+                                        </div>
+                                        <div class="dish-title">
+                                            <h3 class="h3-title">Chicken Noodles</h3>
+                                            <p>120 calories</p>
+                                        </div>
+                                        <div class="dish-info">
+                                            <ul>
+                                                <li>
+                                                    <p>Type</p>
+                                                    <b>Non-Vegetarian</b>
+                                                </li>
+                                                <li>
+                                                    <p>Serves</p>
+                                                    <b>2</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="dist-bottom-row">
+                                            <ul>
+                                                <li>
+                                                    <b>₱379</b>
+                                                </li>
+                                                <li>
+                                                    <button class="dish-add-btn" aria-label="Add to Cart">
+                                                        <i class="uil uil-plus"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 5 -->
+                                <div class="col-lg-4 col-sm-6 dish-box-wp dinner" data-cat="dinner">
+                                    <div class="dish-box text-center">
+                                        <div class="dist-img">
+                                            <img src="assets/images/dish/5.png" alt="Bread Boiled Egg">
+                                        </div>
+                                        <div class="dish-rating">
+                                            5 <i class="uil uil-star"></i>
+                                        </div>
+                                        <div class="dish-title">
+                                            <h3 class="h3-title">Bread Boiled Egg</h3>
+                                            <p>120 calories</p>
+                                        </div>
+                                        <div class="dish-info">
+                                            <ul>
+                                                <li>
+                                                    <p>Type</p>
+                                                    <b>Non-Vegetarian</b>
+                                                </li>
+                                                <li>
+                                                    <p>Serves</p>
+                                                    <b>2</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="dist-bottom-row">
+                                            <ul>
+                                                <li>
+                                                    <b>₱99</b>
+                                                </li>
+                                                <li>
+                                                    <button class="dish-add-btn" aria-label="Add to Cart">
+                                                        <i class="uil uil-plus"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 6 -->
+                                <div class="col-lg-4 col-sm-6 dish-box-wp dinner" data-cat="dinner">
+                                    <div class="dish-box text-center">
+                                        <div class="dist-img">
+                                            <img src="assets/images/dish/6.png" alt="Immunity Dish">
+                                        </div>
+                                        <div class="dish-rating">
+                                            5 <i class="uil uil-star"></i>
+                                        </div>
+                                        <div class="dish-title">
+                                            <h3 class="h3-title">Immunity Dish</h3>
+                                            <p>120 calories</p>
+                                        </div>
+                                        <div class="dish-info">
+                                            <ul>
+                                                <li>
+                                                    <p>Type</p>
+                                                    <b>Vegetarian</b>
+                                                </li>
+                                                <li>
+                                                    <p>Serves</p>
+                                                    <b>2</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="dist-bottom-row">
+                                            <ul>
+                                                <li>
+                                                    <b>₱159</b>
+                                                </li>
+                                                <li>
+                                                    <button class="dish-add-btn" aria-label="Add to Cart">
+                                                        <i class="uil uil-plus"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="two-col-sec section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5">
+                            <div class="sec-img mt-5">
+                                <img src="assets/images/pizza.png" alt="Pizza">
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="sec-text">
+                                <h2 class="xxl-title">Chicken Pepperoni</h2>
+                                <p>Enjoy our Chicken Pepperoni, a delicious blend of flavors that will tantalize your palate.</p>
+                                <p>This dish is designed to provide a delightful experience with every bite!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="two-col-sec section pt-0">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 order-lg-1 order-2">
+                            <div class="sec-text">
+                                <h2 class="xxl-title">Sushi Delight</h2>
+                                <p>Try our signature sushi, an exquisite dish crafted with attention to detail and quality.</p>
+                                <p>Perfect for both lunch and dinner, it's a must-try for all sushi lovers.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 order-lg-2 order-1">
+                            <div class="sec-img">
+                                <img src="assets/images/sushi.png" alt="Sushi">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="book-table section bg-light">
+                <div class="book-table-shape">
+                    <img src="assets/images/table-leaves-shape.png" alt="Table Decoration Shape">
+                </div>
+
+                <div class="book-table-shape book-table-shape2">
+                    <img src="assets/images/table-leaves-shape.png" alt="Table Decoration Shape">
+                </div>
+
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sec-title text-center mb-5">
+                                    <p class="sec-sub-title mb-3">Book a Table</p>
+                                    <h2 class="h2-title">Reserve Your Spot</h2>
+                                    <div class="sec-title-shape mb-4">
+                                        <img src="assets/images/title-shape.svg" alt="Title Background Shape">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="book-table-info">
+                            <div class="row align-items-center">
+                                <div class="col-lg-4">
+                                    <div class="table-title text-center">
+                                        <h3>Monday to Thursday</h3>
+                                        <p>9:00 am - 10:00 pm</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="call-now text-center">
+                                        <i class="uil uil-phone"></i>
+                                        <a href="tel:+639629338140">+639629338140</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="table-title text-center">
+                                        <h3>Friday to Sunday</h3>
+                                        <p>11:00 am - 8:00 pm</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="gallery">
+                            <div class="col-lg-10 m-auto">
+                                <div class="book-table-img-slider" id="icon">
+                                    <div class="swiper-wrapper">
+                                        <a href="assets/images/bt1.jpg" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/bt1.jpg)" aria-label="Table Image 1"></a>
+                                        <a href="assets/images/bt2.jpg" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/bt2.jpg)" aria-label="Table Image 2"></a>
+                                        <a href="assets/images/bt3.jpg" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/bt3.jpg)" aria-label="Table Image 3"></a>
+                                        <a href="assets/images/bt4.jpg" data-fancybox="table-slider" class="book-table-img back-img swiper-slide" style="background-image: url(assets/images/bt4.jpg)" aria-label="Table Image 4"></a>
+                                    </div>
+
+                                    <div class="swiper-button-wp">
+                                        <div class="swiper-button-prev swiper-button" aria-label="Previous">
+                                            <i class="uil uil-angle-left"></i>
+                                        </div>
+                                        <div class="swiper-button-next swiper-button" aria-label="Next">
+                                            <i class="uil uil-angle-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="our-team section">
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sec-title text-center mb-5">
+                                    <p class="sec-sub-title mb-3">Our Team</p>
+                                    <h2 class="h2-title">Meet Our Chefs</h2>
+                                    <div class="sec-title-shape mb-4">
+                                        <img src="assets/images/title-shape.svg" alt="Title Background Shape">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row team-slider">
+                            <div class="swiper-wrapper">
+                                <div class="col-lg-4 swiper-slide">
+                                    <div class="team-box text-center">
+                                        <div style="background-image: url(assets/images/chef/torres.jpg);" class="team-img back-img"></div>
+                                        <h3 class="h3-title">Mark Kim Vincent Torres</h3>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li><a href="https://www.facebook.com/kiritolangtopre.ph"><i class="uil uil-facebook-f"></i></a></li>
+                                                <li><a href="#"><i class="uil uil-instagram"></i></a></li>
+                                                <!--<li><a href="#"><i class="uil uil-youtube"></i></a></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 swiper-slide">
+                                    <div class="team-box text-center">
+                                        <div style="background-image: url(assets/images/chef/daniel.jpg);" class="team-img back-img"></div>
+                                        <h3 class="h3-title">Daniel Suboc</h3>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li><a href="https://www.facebook.com/share/165BmAPPoK/"><i class="uil uil-facebook-f"></i></a></li>
+                                                <li><a href="https://www.instagram.com/danylz.x?igsh=M3NndTA2OWdhYXhh"><i class="uil uil-instagram"></i></a></li>
+                                                <!--<li><a href="#"><i class="uil uil-youtube"></i></a></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 swiper-slide">
+                                    <div class="team-box text-center">
+                                        <div style="background-image: url(assets/images/chef/rosemarie.jpg);" class="team-img back-img"></div>
+                                        <h3 class="h3-title">Rosemarie Bigornia</h3>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li><a href="https://www.facebook.com/share/18zQ4uVwkh/"><i class="uil uil-facebook-f"></i></a></li>
+                                                <li><a href="https://www.instagram.com/lousi_mali?igsh=b292dzZkaDg4Z2Js"><i class="uil uil-instagram"></i></a></li>
+                                                <!--<li><a href="#"><i class="uil uil-youtube"></i></a></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 swiper-slide">
+                                    <div class="team-box text-center">
+                                        <div style="background-image: url(assets/images/chef/paulina.jpg);" class="team-img back-img"></div>
+                                        <h3 class="h3-title">Paulina De la Torre</h3>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li><a href="https://www.facebook.com/share/16T7TwwTov/"><i class="uil uil-facebook-f"></i></a></li>
+                                                <li><a href=":https://www.instagram.com/paulene_20?igsh=bmNlMXl3cW81Njh6"><i class="uil uil-instagram"></i></a></li>
+                                                <!--<li><a href="#"><i class="uil uil-youtube"></i></a></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 swiper-slide">
+                                    <div class="team-box text-center">
+                                        <div style="background-image: url(assets/images/chef/carlos.jpg);" class="team-img back-img"></div>
+                                        <h3 class="h3-title">Carlos Pagay</h3>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li><a href="https://www.facebook.com/share/1HidH58BMj/"><i class="uil uil-facebook-f"></i></a></li>
+                                                <!--<li><a href="#"><i class="uil uil-instagram"></i></a></li>
+                                                <li><a href="#"><i class="uil uil-youtube"></i></a></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 swiper-slide">
+                                    <div class="team-box text-center">
+                                        <div style="background-image: url(assets/images/chef/joan.jpg);" class="team-img back-img"></div>
+                                        <h3 class="h3-title">Joan Lucas</h3>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li><a href="https://www.facebook.com/joan.lucas.5602"><i class="uil uil-facebook-f"></i></a></li>
+                                                <li><a href=""https://www.instagram.com/anang_anak_ni_using?igsh=NWx5ejJrcWJyZ2dz><i class="uil uil-instagram"></i></a></li>
+                                                <!--<li><a href="#"><i class="uil uil-youtube"></i></a></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-button-wp">
+                                <div class="swiper-button-prev swiper-button" aria-label="Previous">
+                                    <i class="uil uil-angle-left"></i>
+                                </div>
+                                <div class="swiper-button-next swiper-button" aria-label="Next">
+                                    <i class="uil uil-angle-right"></i>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="testimonials section bg-light">
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sec-title text-center mb-5">
+                                    <p class="sec-sub-title mb-3">What They Say</p>
+                                    <h2 class="h2-title">What Our Customers <span>Say About Us</span></h2>
+                                    <div class="sec-title-shape mb-4">
+                                        <img src="assets/images/title-shape.svg" alt="Title Background Shape">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="testimonials-img">
+                                    <img src="assets/images/testimonial-img.png" alt="Customer Testimonials">
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="testimonials-box">
+                                            <div class="testimonial-box-top">
+                                                <div class="testimonials-box-img back-img" style="background-image: url(assets/images/testimonials/selena.jpg);"></div>
+                                                <div class="star-rating-wp">
+                                                    <div class="star-rating">
+                                                        <span class="star-rating__fill" style="width: 85%"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="testimonials-box-text">
+                                                <h3 class="h3-title">Selena Gomez</h3>
+                                                <p>Hatdog yummy my tommy!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="testimonials-box">
+                                            <div class="testimonial-box-top">
+                                                <div class="testimonials-box-img back-img" style="background-image: url(assets/images/testimonials/jayjay.jpg);"></div>
+                                                <div class="star-rating-wp">
+                                                    <div class="star-rating">
+                                                        <span class="star-rating__fill" style="width: 80%"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="testimonials-box-text">
+                                                <h3 class="h3-title">Ashtine Olviga</h3>
+                                                <p>Yummy!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="testimonials-box">
+                                            <div class="testimonial-box-top">
+                                                <div class="testimonials-box-img back-img" style="background-image: url(assets/images/testimonials/fyang.jpeg);"></div>
+                                                <div class="star-rating-wp">
+                                                    <div class="star-rating">
+                                                        <span class="star-rating__fill" style="width: 89%"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="testimonials-box-text">
+                                                <h3 class="h3-title">Sofia Smith</h3>
+                                                <p>Batil patong, napalalu!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="testimonials-box">
+                                            <div class="testimonial-box-top">
+                                                <div class="testimonials-box-img back-img" style="background-image: url(assets/images/testimonials/jm.jpg);"></div>
+                                                <div class="star-rating-wp">
+                                                    <div class="star-rating">
+                                                        <span class="star-rating__fill" style="width: 100%"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="testimonials-box-text">
+                                                <h3 class="h3-title">Jm Ibarra</h3>
+                                                <p>Bakla ako.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="faq-sec section-repeat-img" style="background-image: url(assets/images/faq-bg.png);">
+                <div class="sec-wp">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sec-title text-center mb-5">
+                                    <p class="sec-sub-title mb-3">FAQs</p>
+                                    <h2 class="h2-title">Frequently <span>Asked Questions</span></h2>
+                                    <div class="sec-title-shape mb-4">
+                                        <img src="assets/images/title-shape.svg" alt="Title Background Shape">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-row">
+                            <div class="faq-box">
+                                <h4 class="h4-title">What are the restaurant hours?</h4>
+                                <p>We are open from Monday to Sunday at the designated hours for your convenience.</p>
+                            </div>
+                            <div class="faq-box">
+                                <h4 class="h4-title">How do I get my refund?</h4>
+                                <p>Refund policies are in place for certain situations listed on our website. Please check for details.</p>
+                            </div>
+                            <div class="faq-box">
+                                <h4 class="h4-title">How long will it take for food to arrive?</h4>
+                                <p>Delivery times vary depending on the distance and time of day. Expect your meal to arrive within 30-45 minutes.</p>
+                            </div>
+                            <div class="faq-box">
+                                <h4 class="h4-title">Does your restaurant offer both veg and non-veg options?</h4>
+                                <p>Yes, we provide a range of vegetarian and non-vegetarian dishes on our menu.</p>
+                            </div>
+                            <div class="faq-box">
+                                <h4 class="h4-title">What are the delivery charges?</h4>
+                                <p>Delivery charges are calculated at checkout based on your location.</p>
+                            </div>
+                            <div class="faq-box">
+                                <h4 class="h4-title">Who is eligible for pro membership?</h4>
+                                <p>Pro membership is available to frequent customers and those who wish to receive special offers and discounts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="bg-pattern bg-light repeat-img" style="background-image: url(assets/images/blog-pattern-bg.png);">
+                <section class="blog-sec section" id="blog">
+                    <div class="sec-wp">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="sec-title text-center mb-5">
+                                        <p class="sec-sub-title mb-3">Our Blog</p>
+                                        <h2 class="h2-title">Latest Publications</h2>
+                                        <div class="sec-title-shape mb-4">
+                                            <img src="assets/images/title-shape.svg" alt="Title Background Shape">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="blog-box">
+                                        <div class="blog-img back-img" style="background-image: url(assets/images/blog/blog1.jpg);"></div>
+                                        <div class="blog-text">
+                                            <p class="blog-date">September 15, 2021</p>
+                                            <a href="#" class="h4-title">Energy Drink to Make at Home</a>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur ipsa
+                                                explicabo atque reprehenderit beatae!</p>
+                                            <a href="#" class="sec-btn">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="blog-box">
+                                        <div class="blog-img back-img" style="background-image: url(assets/images/blog/blog2.jpg);"></div>
+                                        <div class="blog-text">
+                                            <p class="blog-date">October 15, 2021</p>
+                                            <a href="#" class="h4-title">Fresh Veggie and Rice Combo for Dinner</a>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur ipsa
+                                                explicabo atque reprehenderit beatae!</p>
+                                            <a href="#" class="sec-btn">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="blog-box">
+                                        <div class="blog-img back-img" style="background-image: url(assets/images/blog/blog3.jpg);"></div>
+                                        <div class="blog-text">
+                                            <p class="blog-date">November 15, 2021</p>
+                                            <a href="#" class="h4-title">Chicken Burger with Double Nuggets</a>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur ipsa
+                                                explicabo atque reprehenderit beatae!</p>
+                                            <a href="#" class="sec-btn">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="newsletter-sec section pt-0">
+                    <div class="sec-wp">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 m-auto">
+                                    <div class="newsletter-box text-center back-img white-text" style="background-image: url(assets/images/news.jpg);">
+                                        <div class="bg-overlay dark-overlay"></div>
+                                        <div class="sec-wp">
+                                            <div class="newsletter-box-text">
+                                                <h2 class="h2-title">Subscribe to Our Newsletter</h2>
+                                                <p>Stay updated with the latest news and special offers.</p>
+                                            </div>
+                                            <form action="#" class="newsletter-form" role="form">
+                                                <input type="email" class="form-input" placeholder="Enter your Email Here" required aria-label="Email Address">
+                                                <button type="submit" class="sec-btn primary-btn">Submit</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Footer Starts -->
+            <footer class="site-footer" id="contact">
+                <div class="top-footer section">
+                    <div class="sec-wp">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="footer-info">
+                                        <div class="footer-logo">
+                                            <a href="index.html">
+                                                <img src="logo.png" alt="Restaurant Logo">
+                                            </a>
+                                        </div>
+                                        <p>Your satisfaction is our priority. Experience our best dishes with us!</p>
+                                        <div class="social-icon">
+                                            <ul>
+                                                <li><a href="https://www.facebook.com/kiritolangtopre.ph"><i class="uil uil-facebook-f"></i></a></li>
+                                                <li><a href="#"><i class="uil uil-instagram"></i></a></li>
+                                                <li><a href="https://github.com/MgAlas071214"><i class="uil uil-github-alt"></i></a></li>
+                                                <li><a href="https://www.youtube.com/@KiRito-qm2pi"><i class="uil uil-youtube"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="footer-flex-box">
+                                        <div class="footer-table-info">
+                                            <h3 class="h3-title">Opening Hours</h3>
+                                            <ul>
+                                                <li><i class="uil uil-clock"></i> Mon-Thurs: 9am - 10pm</li>
+                                                <li><i class="uil uil-clock"></i> Fri-Sun: 11am - 10pm</li>
+                                            </ul>
+                                        </div>
+                                        <div class="footer-menu food-nav-menu">
+                                            <h3 class="h3-title">Quick Links</h3>
+                                            <ul class="column-2">
+                                                <li><a href="#home" class="footer-active-menu">Home</a></li>
+                                                <li><a href="#about">About</a></li>
+                                                <li><a href="#menu">Menu</a></li>
+                                                <li><a href="#gallery">Gallery</a></li>
+                                                <li><a href="#blog">Blog</a></li>
+                                                <li><a href="#contact">Contact</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="footer-menu">
+                                            <h3 class="h3-title">Company</h3>
+                                            <ul>
+                                                <li><a href="#">Terms & Conditions</a></li>
+                                                <li><a href="#">Privacy Policy</a></li>
+                                                <li><a href="#">Cookie Policy</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-footer">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <div class="copyright-text">
+                                    <p>Copyright © 2025 <span class="name">BSIT-2A Group7.</span> All Rights Reserved.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="scrolltop" aria-label="Scroll to Top"><i class="uil uil-angle-up"></i></button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+
+    <!-- FontAwesome -->
+    <script src="assets/js/font-awesome.min.js"></script>
+
+    <!-- Swiper JS -->
+    <script src="assets/js/swiper-bundle.min.js"></script>
+
+    <!-- Mixitup - Filter -->
+    <script src="assets/js/jquery.mixitup.min.js"></script>
+
+    <!-- Fancybox -->
+    <script src="assets/js/jquery.fancybox.min.js"></script>
+
+    <!-- Parallax -->
+    <script src="assets/js/parallax.min.js"></script>
+
+    <!-- GSAP -->
+    <script src="assets/js/gsap.min.js"></script>
+
+    <!-- Scroll Trigger -->
+    <script src="assets/js/ScrollTrigger.min.js"></script>
+    <!-- Scroll To Plugin -->
+    <script src="assets/js/ScrollToPlugin.min.js"></script>
+    <!-- Smooth Scroll -->
+    <script src="assets/js/smooth-scroll.js"></script>
+    <!-- Custom JS -->
+    <script src="main.js"></script>
+    <!-- Update the existing script section in your HTML -->
+<script>
+    $(document).ready(function() {
+        // Check login status
+        function checkLoginStatus() {
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                $('#loginLink').hide();
+                $('#registerLink').hide();
+                $('#logoutLink').show();
+            } else {
+                $('#loginLink').show();
+                $('#registerLink').show();
+                $('#logoutLink').hide();
+            }
+        }
+
+        // Initial check
+        checkLoginStatus();
+
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            $('.dropdown-content').hide();
+            checkLoginStatus();
+            // Redirect to home page after logout
+            window.location.href = 'index.html';
+        }
+
+        // Logout click handler
+        $(document).on('click', '#logoutLink', function(e) {
+            e.preventDefault();
+            logout();
+        });
+
+        // User dropdown
+        $('.user-btn').click(function(e) {
+            e.stopPropagation();
+            $('.dropdown-content').toggle();
+        });
+
+        // Close dropdown when clicking outside
+        $(document).click(function(event) {
+            if (!$(event.target).closest('.user-dropdown').length) {
+                $('.dropdown-content').hide();
+            }
+        });
+
+        // Close dropdown on menu click
+        $('.dropdown-content a').click(function() {
+            $('.dropdown-content').hide();
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Online Food Ordering System</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --primary-hover: #ff5252;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --border-color: #ddd;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-gray);
+            transition: all 0.3s ease;
+        }
+        
+        .auth-body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .auth-container {
+            width: 100%;
+            max-width: 500px;
+            transition: all 0.4s ease;
+        }
+        
+        .auth-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            transform: translateY(0);
+            opacity: 1;
+            transition: all 0.4s ease;
+        }
+        
+        .auth-card.hide {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        
+        .auth-logo {
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-logo img {
+            max-width: 160px;
+            height: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-card h2 {
+            margin-bottom: 25px;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 28px;
+        }
+        
+        .auth-form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+        }
+        
+        .form-group .error-message {
+            color: var(--error-color);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-group.error input {
+            border-color: var(--error-color);
+        }
+        
+        .form-group.error .error-message {
+            display: block;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .remember-forgot div {
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember-forgot input {
+            margin-right: 8px;
+            width: auto;
+        }
+        
+        .remember-forgot label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        
+        .remember-forgot a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .auth-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+        
+        .auth-footer {
+            margin-top: 25px;
+            font-size: 15px;
+            color: #666;
+        }
+        
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .success-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .success-message.show {
+            opacity: 1;
+            visibility: visible;
+            top: 30px;
+        }
+        
+        .success-message i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-container {
+                max-width: 100%;
+                padding: 0 20px;
+            }
+            
+            .auth-card {
+                padding: 30px;
+            }
+            
+            .auth-card h2 {
+                font-size: 24px;
+            }
+            
+            .auth-logo img {
+                max-width: 140px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .remember-forgot a {
+                margin-top: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 25px 20px;
+            }
+            
+            .form-group input {
+                padding: 12px 15px;
+            }
+            
+            .auth-btn {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body class="auth-body">
+    <div class="success-message" id="successMessage">
+        <i class="uil uil-check-circle"></i>
+        <span>Login successful! Redirecting to dashboard...</span>
+    </div>
+    
+    <div class="auth-container">
+        <div class="auth-card" id="authCard">
+            <div class="auth-logo">
+                <a href="index.html">
+                    <img src="logo.png" width="160" height="36" alt="Restaurant Logo">
+                </a>
+            </div>
+            <h2 class="animate__animated animate__fadeIn">Welcome Back</h2>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group animate__animated animate__fadeIn animate__delay-1s">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="error-message">Please enter a valid email</span>
+                </div>
+                <div class="form-group animate__animated animate__fadeIn animate__delay-1s">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                    <span class="error-message">Password must be at least 6 characters</span>
+                </div>
+                <div class="remember-forgot animate__animated animate__fadeIn animate__delay-2s">
+                    <div>
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="forgot-password.html">Forgot password?</a>
+                </div>
+                <button type="submit" class="auth-btn animate__animated animate__fadeInUp animate__delay-2s">Login</button>
+            </form>
+            
+            <div class="auth-footer animate__animated animate__fadeIn animate__delay-3s">
+                Don't have an account? <a href="register.html">Register here</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Redirect if already logged in
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = 'dashboard.html';
+            }
+    
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+            // Show success message if redirected from registration
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('from') === 'register') {
+                showMessage('Registration successful! Please log in.', 'success');
+            }
+    
+            // Autofill email if remembered
+            if (localStorage.getItem('rememberMe') === 'true' && localStorage.getItem('userEmail')) {
+                $('#email').val(localStorage.getItem('userEmail'));
+                $('#remember').prop('checked', true);
+            }
+    
+            // Real-time validation
+            $('#email').on('input', function () {
+                if (emailRegex.test($(this).val())) {
+                    $(this).closest('.form-group').removeClass('error');
+                }
+            });
+    
+            $('#password').on('input', function () {
+                if ($(this).val().length >= 6) {
+                    $(this).closest('.form-group').removeClass('error');
+                }
+            });
+    
+            // Handle login form submission
+            $('#loginForm').submit(function (e) {
+                e.preventDefault();
+    
+                $('.form-group').removeClass('error');
+                let isValid = true;
+    
+                const email = $('#email').val().trim();
+                const password = $('#password').val();
+                const remember = $('#remember').is(':checked');
+    
+                if (!emailRegex.test(email)) {
+                    $('#email').closest('.form-group').addClass('error');
+                    isValid = false;
+                }
+    
+                if (password.length < 6) {
+                    $('#password').closest('.form-group').addClass('error');
+                    isValid = false;
+                }
+    
+                if (!isValid) return;
+    
+                // Fetch all registered users
+                let registeredUsers = {};
+                try {
+                    registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || {};
+                } catch (e) {
+                    showMessage('User data corrupted. Please register again.', 'error');
+                    return;
+                }
+    
+                // Validate if user exists
+                if (!registeredUsers[email]) {
+                    showMessage('Email not registered. Redirecting to registration...', 'error');
+                    setTimeout(() => window.location.href = 'register.html', 2000);
+                    return;
+                }
+    
+                // Validate password
+                if (registeredUsers[email].password !== password) {
+                    $('#password').closest('.form-group').addClass('error');
+                    showMessage('Incorrect password.', 'error');
+                    return;
+                }
+    
+                // Set login session
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+    
+                if (remember) {
+                    localStorage.setItem('rememberMe', 'true');
+                } else {
+                    localStorage.removeItem('rememberMe');
+                }
+    
+                showMessage('Login successful! Redirecting to dashboard...', 'success');
+                $('#authCard').addClass('hide');
+    
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            });
+        });
+    
+        // Message utility
+        function showMessage(message, type = 'success') {
+            const messageBox = $('#successMessage');
+            const color = type === 'success' ? 'green' : 'red';
+    
+            messageBox.find('span').text(message);
+            messageBox.css('color', color);
+            messageBox.addClass('show');
+    
+            setTimeout(() => messageBox.removeClass('show'), 3000);
+        }
+    </script>
+    
+    
+</body>
+</html>

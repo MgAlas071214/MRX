@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders - Online Food Ordering System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .orders-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(30,30,47,0.12);
+            padding: 2.5rem 2rem;
+        }
+        .orders-title {
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: #1e1e2f;
+            text-align: center;
+        }
+        .orders-section {
+            margin-bottom: 2.2rem;
+        }
+        .orders-section h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+        }
+        .order-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(30,30,47,0.04);
+            padding: 1rem 1rem 0.7rem 1rem;
+            margin-bottom: 1.1rem;
+            font-size: 0.98rem;
+        }
+        .order-card .order-id {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        .order-card .order-status {
+            font-weight: 500;
+            color: #2ecc71;
+        }
+        .order-card .order-status.pending { color: #f39c12; }
+        .order-card .order-status.cancelled { color: #e74c3c; }
+        .order-card .order-date {
+            color: #888;
+            font-size: 0.93rem;
+        }
+        .order-card ul {
+            margin: 0.5rem 0 0 1.2rem;
+            padding: 0;
+        }
+        .no-orders {
+            color: #888;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 600px) {
+            .orders-container { padding: 1.2rem 0.3rem; }
+            .order-card { padding: 0.8rem 0.5rem 0.6rem 0.5rem; }
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(30,30,47,0.04);
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 1.2rem;
+        }
+        .back-btn:hover, .back-btn:focus {
+            background: #ff6b6b;
+            color: #fff;
+            border-color: #ff6b6b;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="orders-container">
+        <a href="dashboard.html" class="btn btn-outline-primary back-btn mb-3">
+            <i class="uil uil-arrow-left"></i> Back to Dashboard
+        </a>
+        <div class="orders-title">My Orders</div>
+        <div class="orders-section" id="newOrdersSection">
+            <h5>New Orders</h5>
+            <div id="newOrdersList"></div>
+        </div>
+        <div class="orders-section" id="recentOrdersSection">
+            <h5>Recent Orders</h5>
+            <div id="recentOrdersList"></div>
+        </div>
+    </div>
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script>
+    function loadUserOrders() {
+        const email = localStorage.getItem('userEmail');
+        const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+        // Filter orders for this user (assuming orderData has a userEmail field)
+        const userOrders = allOrders.filter(order => order.userEmail === email);
+
+        // New orders: status is "pending" or "processing"
+        const newOrders = userOrders.filter(order => 
+            !order.status || order.status === 'pending' || order.status === 'processing'
+        );
+        // Recent orders: status is "completed" or "cancelled"
+        const recentOrders = userOrders.filter(order => 
+            order.status === 'completed' || order.status === 'cancelled'
+        );
+
+        function renderOrders(orders, $container, emptyMsg) {
+            $container.empty();
+            if (orders.length === 0) {
+                $container.html(`<div class="no-orders">${emptyMsg}</div>`);
+                return;
+            }
+            orders.slice().reverse().forEach(order => {
+                let itemsHtml = order.items.map(i => `<li>${i.name} <span style="color:#888;">x${i.quantity}</span></li>`).join('');
+                $container.append(`
+                    <div class="order-card">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="order-id">Order #${order.orderId || 'N/A'}</span>
+                            <span class="order-status ${order.status || 'pending'}">
+                                ${order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending'}
+                            </span>
+                        </div>
+                        <div class="order-date mb-1">${order.orderDate ? new Date(order.orderDate).toLocaleString() : ''}</div>
+                        <div><strong>Items:</strong>
+                            <ul>${itemsHtml}</ul>
+                        </div>
+                        ${order.orderType ? `<div><strong>Type:</strong> ${order.orderType.charAt(0).toUpperCase() + order.orderType.slice(1)}</div>` : ''}
+                        ${order.address ? `<div><strong>Address:</strong> ${order.address}</div>` : ''}
+                        <div><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : ''}</div>
+                    </div>
+                `);
+            });
+        }
+
+        renderOrders(newOrders, $('#newOrdersList'), 'No new orders.');
+        renderOrders(recentOrders, $('#recentOrdersList'), 'No recent orders.');
+    }
+
+    $(function() {
+        loadUserOrders();
+    });
+
+    // Default menu items (only used if localStorage is empty)
+    const defaultMenuItems = [
+        {
+            id: 1,
+            name: "Chicken Adobo",
+            description: "Chicken Adobo is a Filipino dish of chicken simmered in a savory and tangy soy sauce and vinegar mixture with garlic and spices.",
+            price: 120,
+            category: "lunch",
+            image: "assets/images/menu/adobo.jpg"
+        },
+        // ... add all your default items here ...
+    ];
+
+    // Load menu items from localStorage, or use default if not present
+    let menuItems = JSON.parse(localStorage.getItem('menuItems') || 'null');
+    if (!menuItems || !Array.isArray(menuItems) || menuItems.length === 0) {
+        menuItems = defaultMenuItems;
+        localStorage.setItem('menuItems', JSON.stringify(menuItems));
+    }
+    </script>
+</body>
+</html>

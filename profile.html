@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .profile-container {
+            max-width: 420px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(30,30,47,0.12);
+            padding: 2.5rem 2rem;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: #ff6b6b;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1rem auto;
+        }
+        .profile-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #1e1e2f;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .form-control:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 2px #ff6b6b22;
+        }
+        .edit-btn, .save-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-top: 1.2rem;
+        }
+        .edit-btn {
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+        }
+        .edit-btn:hover { background: #ff5252; }
+        .save-btn {
+            background: #2ecc71;
+            color: #fff;
+            border: none;
+        }
+        .save-btn:hover { background: #27ae60; }
+        .cancel-btn {
+            background: #eee;
+            color: #333;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+        .success-message, .error-message {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            display: none;
+        }
+        .success-message { color: #2ecc71; }
+        .error-message { color: #e74c3c; }
+        @media (max-width: 600px) {
+            .profile-container { padding: 1.5rem 0.5rem; }
+        }
+        #goBackBtn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(30,30,47,0.04);
+            transition: background 0.2s, color 0.2s;
+        }
+        #goBackBtn:hover, #goBackBtn:focus {
+            background: #ff6b6b;
+            color: #fff;
+            border-color: #ff6b6b;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            #goBackBtn {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 1rem;
+            }
+        }
+        .recent-orders {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.2rem 1rem;
+            box-shadow: 0 2px 8px rgba(30,30,47,0.04);
+        }
+        .order-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(30,30,47,0.06);
+            padding: 1rem 1rem 0.7rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.98rem;
+        }
+        .order-card .order-id {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        .order-card .order-status {
+            font-weight: 500;
+            color: #2ecc71;
+        }
+        .order-card .order-date {
+            color: #888;
+            font-size: 0.93rem;
+        }
+        .order-card ul {
+            margin: 0.5rem 0 0 1.2rem;
+            padding: 0;
+        }
+        @media (max-width: 600px) {
+            .recent-orders { padding: 1rem 0.3rem; }
+            .order-card { padding: 0.8rem 0.5rem 0.6rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <a href="dashboard.html" class="btn btn-outline-primary mb-3" id="goBackBtn">
+            <i class="uil uil-arrow-left"></i> Back to Dashboard
+        </a>
+        <div class="profile-avatar" id="profileAvatar">
+            <i class="uil uil-user"></i>
+        </div>
+        <div class="profile-title">My Profile</div>
+        <form id="profileForm" autocomplete="off">
+            <div class="mb-3">
+                <label for="profileName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="profileName" required disabled>
+            </div>
+            <div class="mb-3">
+                <label for="profileEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="profileEmail" required disabled>
+            </div>
+            <div class="mb-3">
+                <label for="profilePassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="profilePassword" minlength="6" placeholder="******" disabled>
+            </div>
+            <button type="button" class="edit-btn" id="editProfileBtn"><i class="uil uil-edit"></i> Edit Profile</button>
+            <button type="submit" class="save-btn" id="saveProfileBtn" style="display:none;"><i class="uil uil-save"></i> Save Changes</button>
+            <button type="button" class="cancel-btn" id="cancelEditBtn" style="display:none;">Cancel</button>
+            <div class="success-message" id="profileSuccess">Profile updated successfully!</div>
+            <div class="error-message" id="profileError"></div>
+        </form>
+        <div class="recent-orders mt-4">
+            <h5 class="mb-3" style="font-weight:600;">Recent Orders</h5>
+            <div id="ordersList">
+                <!-- Orders will be loaded here -->
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script>
+    // Utility: Get and set user info in localStorage
+    function getLoggedInUser() {
+        const email = localStorage.getItem('userEmail');
+        let name = '';
+        let password = '';
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+        if (users[email]) {
+            name = users[email].name || email.split('@')[0];
+            password = users[email].password || '';
+        } else {
+            name = email ? email.split('@')[0] : '';
+        }
+        return { email, name, password };
+    }
+    function setLoggedInUser({ email, name, password }) {
+        let users = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+        if (!users[email]) users[email] = {};
+        users[email].name = name;
+        users[email].password = password;
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+
+    // Populate profile info
+    function loadProfile() {
+        const user = getLoggedInUser();
+        if (!user.email) {
+            window.location.href = 'login.html';
+            return;
+        }
+        $('#profileName').val(user.name);
+        $('#profileEmail').val(user.email);
+        $('#profilePassword').val(user.password);
+        $('#profileAvatar').html(user.name ? user.name.charAt(0).toUpperCase() : '<i class="uil uil-user"></i>');
+    }
+
+    // Edit mode
+    $('#editProfileBtn').click(function() {
+        $('#profileName, #profilePassword').prop('disabled', false);
+        $('#editProfileBtn').hide();
+        $('#saveProfileBtn, #cancelEditBtn').show();
+        $('#profileSuccess, #profileError').hide();
+    });
+    $('#cancelEditBtn').click(function() {
+        loadProfile();
+        $('#profileName, #profilePassword').prop('disabled', true);
+        $('#editProfileBtn').show();
+        $('#saveProfileBtn, #cancelEditBtn').hide();
+        $('#profileSuccess, #profileError').hide();
+    });
+
+    // Save changes
+    $('#profileForm').submit(function(e) {
+        e.preventDefault();
+        const name = $('#profileName').val().trim();
+        const email = $('#profileEmail').val().trim();
+        const password = $('#profilePassword').val();
+        if (!name || !email || password.length < 6) {
+            $('#profileError').text('Please fill all fields correctly.').show();
+            $('#profileSuccess').hide();
+            return;
+        }
+        setLoggedInUser({ email, name, password });
+        $('#profileName, #profilePassword').prop('disabled', true);
+        $('#editProfileBtn').show();
+        $('#saveProfileBtn, #cancelEditBtn').hide();
+        $('#profileSuccess').show();
+        $('#profileError').hide();
+        $('#profileAvatar').html(name.charAt(0).toUpperCase());
+    });
+
+    // On load
+    $(function() {
+        loadProfile();
+        $('#profileName, #profileEmail, #profilePassword').prop('disabled', true);
+        $('#saveProfileBtn, #cancelEditBtn').hide();
+        loadUserOrders();
+    });
+
+    function loadUserOrders() {
+        const email = localStorage.getItem('userEmail');
+        const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+        // Filter orders for this user (assuming orderData has a userEmail field)
+        const userOrders = allOrders.filter(order => order.userEmail === email);
+        const $ordersList = $('#ordersList');
+        $ordersList.empty();
+
+        if (userOrders.length === 0) {
+            $ordersList.html('<div class="text-muted text-center">No recent orders found.</div>');
+            return;
+        }
+
+        // Show up to 5 most recent orders
+        userOrders.slice(-5).reverse().forEach(order => {
+            let itemsHtml = order.items.map(i => `<li>${i.name} <span style="color:#888;">x${i.quantity}</span></li>`).join('');
+            $ordersList.append(`
+                <div class="order-card">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="order-id">Order #${order.orderId || 'N/A'}</span>
+                        <span class="order-status">${order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending'}</span>
+                    </div>
+                    <div class="order-date mb-1">${order.orderDate ? new Date(order.orderDate).toLocaleString() : ''}</div>
+                    <div><strong>Items:</strong>
+                        <ul>${itemsHtml}</ul>
+                    </div>
+                    ${order.orderType ? `<div><strong>Type:</strong> ${order.orderType.charAt(0).toUpperCase() + order.orderType.slice(1)}</div>` : ''}
+                    ${order.address ? `<div><strong>Address:</strong> ${order.address}</div>` : ''}
+                    <div><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : ''}</div>
+                </div>
+            `);
+        });
+    }
+    </script>
+</body>
+</html>
