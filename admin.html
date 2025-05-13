@@ -93,35 +93,31 @@
         .approve-btn:hover { background: #27ae60; }
         .badge-success { background: #2ecc71; }
         .badge-pending { background: #f39c12; }
+        .decline-btn {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-left: 6px;
+        }
+        .decline-btn:hover { background: #c0392b; }
+        .badge-declined { background: #e74c3c; }
         .modal .form-label { font-weight: 500; }
         @media (max-width: 600px) {
             .main-content { padding: 1rem 0.2rem; }
+            .modal-content, .form-control {
+                font-size: 1rem;
+            }
+            .modal-content {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Login Section -->
-    <div class="container" id="adminLoginSection" style="max-width:400px; margin:60px auto;">
-        <div class="text-center mb-4">
-            <img src="logo.png" alt="Logo" style="max-width:120px;">
-        </div>
-        <div class="card p-4 shadow">
-            <h3 class="mb-3 text-center">Admin Login</h3>
-            <form id="adminLoginForm" autocomplete="off">
-                <div class="mb-3">
-                    <label for="adminUsername" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="adminUsername" required autofocus>
-                </div>
-                <div class="mb-3">
-                    <label for="adminPassword" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="adminPassword" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-                <div id="loginError" class="text-danger mt-3" style="display:none;"></div>
-            </form>
-        </div>
-    </div>
-
     <!-- Sidebar -->
     <button class="btn btn-outline-secondary sidebar-toggle d-lg-none" id="sidebarToggle" style="display:none;">
         <i class="uil uil-bars"></i>
@@ -132,6 +128,7 @@
             <li><a href="#" class="active" data-section="dashboard"><i class="uil uil-dashboard"></i> Dashboard</a></li>
             <li><a href="#" data-section="menu"><i class="uil uil-utensils"></i> Menu Items</a></li>
             <li><a href="#" data-section="orders"><i class="uil uil-shopping-bag"></i> Orders</a></li>
+            <li><a href="#" data-section="users"><i class="uil uil-users-alt"></i> Users</a></li>
         </ul>
     </div>
 
@@ -143,6 +140,15 @@
         </div>
         <!-- Dashboard Section -->
         <div id="dashboardSection" class="admin-section">
+            <div class="row g-3 mb-4" id="orderSummaryCards">
+                <!-- Order summary cards will be injected here -->
+            </div>
+            <div class="mb-4">
+                <div class="card shadow-sm border-0 p-3">
+                    <h5 class="mb-3">Best Sellers</h5>
+                    <canvas id="bestSellerChart" height="120"></canvas>
+                </div>
+            </div>
             <div class="alert alert-info">Welcome to the Admin Dashboard!</div>
         </div>
         <!-- Menu Management Section -->
@@ -195,6 +201,22 @@
                 </div>
             </div>
         </div>
+        <!-- Users Section -->
+        <div id="usersSection" class="admin-section" style="display:none;">
+            <h4>Registered Users</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Registration Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
         <!-- Modal for Add/Edit Menu Item -->
         <div class="modal fade" id="menuItemModal" tabindex="-1" aria-labelledby="menuModalTitle" aria-hidden="true">
           <div class="modal-dialog">
@@ -218,8 +240,16 @@
                   <input type="number" class="form-control" id="menuItemPrice" required min="1">
                 </div>
                 <div class="mb-3">
-                  <label class="form-label">Category</label>
-                  <input type="text" class="form-control" id="menuItemCategory" required>
+                  <label for="category">Category</label>
+                  <select id="category" name="category" class="form-control" required>
+                    <option value="" disabled selected>Select category</option>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="desserts">Desserts</option>
+                    <option value="drinks">Drinks</option>
+                    <option value="appetizer">Appetizer</option>
+                  </select>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Image URL</label>
@@ -236,38 +266,46 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    // --- Admin Login Logic ---
-    $('#adminLoginForm').submit(function(e) {
-        e.preventDefault();
-        $('#loginError').hide();
-        const username = $('#adminUsername').val().trim();
-        const password = $('#adminPassword').val().trim();
-        if (username === 'admin' && password === 'admin123') {
-            localStorage.setItem('adminLoggedIn', 'true');
-            $('#adminLoginSection').hide();
-            $('#adminSidebar, #sidebarToggle, #adminDashboardSection').show();
-            showSection('dashboard');
-        } else {
-            $('#loginError').text('Invalid username or password.').show();
-        }
-    });
-
-    // --- Show dashboard if already logged in ---
     $(function() {
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            $('#adminLoginSection').hide();
-            $('#adminSidebar, #sidebarToggle, #adminDashboardSection').show();
-            showSection('dashboard');
+        // Redirect to login if not logged in as admin
+        if (localStorage.getItem('userRole') !== 'admin') {
+            window.location.href = 'login.html';
+            return;
         }
+        // Show admin panel
+        $('#adminSidebar, #sidebarToggle, #adminDashboardSection').show();
+        showSection('dashboard');
+        // Responsive: close sidebar on click outside (mobile)
+        $(document).on('click', function(e) {
+            if ($(window).width() <= 900) {
+                if (!$(e.target).closest('.admin-sidebar, #sidebarToggle').length) {
+                    $('#adminSidebar').removeClass('show');
+                }
+            }
+        });
     });
 
     // --- Sidebar toggle for mobile ---
     $('#sidebarToggle').click(function() {
         $('#adminSidebar').toggleClass('show');
+        if ($('#adminSidebar').hasClass('show')) {
+            $('#adminSidebar').attr('aria-expanded', 'true');
+        } else {
+            $('#adminSidebar').attr('aria-expanded', 'false');
+        }
+    });
+    $('#sidebarToggle').attr('aria-label', 'Toggle sidebar').attr('tabindex', 0);
+    $('#sidebarToggle').on('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') $(this).click();
     });
 
     // --- Sidebar navigation ---
+    $('#adminSidebar ul li a').attr('tabindex', 0);
+    $('#adminSidebar ul li a').on('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') $(this).click();
+    });
     $('#adminSidebar ul li a').click(function(e) {
         e.preventDefault();
         $('#adminSidebar ul li a').removeClass('active');
@@ -280,6 +318,8 @@
         if (section === 'dashboard') {
             $('#dashboardSection').show();
             $('#sectionTitle').text('Dashboard');
+            renderOrderSummaryCards();
+            renderBestSellerChart();
         } else if (section === 'menu') {
             $('#menuSection').show();
             $('#sectionTitle').text('Menu Items');
@@ -288,14 +328,19 @@
             $('#ordersSection').show();
             $('#sectionTitle').text('Orders');
             renderAdminOrders();
+        } else if (section === 'users') {
+            $('#usersSection').show();
+            $('#sectionTitle').text('Users');
+            renderUsersTable();
         }
     }
 
     // --- Logout ---
     $('#adminLogoutBtn').click(function() {
-        localStorage.removeItem('adminLoggedIn');
-        $('#adminSidebar, #sidebarToggle, #adminDashboardSection').hide();
-        $('#adminLoginSection').show();
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userEmail');
+        window.location.href = 'login.html';
     });
 
     // --- MENU MANAGEMENT ---
@@ -327,6 +372,7 @@
     function saveMenuItems() {
         localStorage.setItem('menuItems', JSON.stringify(menuItems));
         renderMenuTable();
+        renderBestSellerChart();
     }
 
     // Add new item
@@ -348,7 +394,7 @@
         $('#menuItemName').val(item.name);
         $('#menuItemDescription').val(item.description);
         $('#menuItemPrice').val(item.price);
-        $('#menuItemCategory').val(item.category);
+        $('#category').val(item.category);
         $('#menuItemImage').val(item.image);
         const modal = new bootstrap.Modal(document.getElementById('menuItemModal'));
         modal.show();
@@ -370,7 +416,7 @@
             name: $('#menuItemName').val(),
             description: $('#menuItemDescription').val(),
             price: parseFloat($('#menuItemPrice').val()),
-            category: $('#menuItemCategory').val(),
+            category: $('#category').val(),
             image: $('#menuItemImage').val()
         };
         if (editingIndex !== null) {
@@ -412,12 +458,15 @@
                         <button class="approve-btn approve-order" data-idx="${orders.indexOf(order)}">
                             <i class="uil uil-check"></i> Approve
                         </button>
+                        <button class="decline-btn decline-order" data-idx="${orders.indexOf(order)}">
+                            <i class="uil uil-times"></i> Decline
+                        </button>
                     </td>
                 </tr>
             `);
         });
 
-        // History (approved and others)
+        // History (approved, declined, and others)
         const historyOrders = orders.filter(o => o.status && o.status !== 'pending');
         const $historyTbody = $('#orderHistoryTable tbody');
         $historyTbody.empty();
@@ -426,6 +475,10 @@
         }
         historyOrders.slice().reverse().forEach(order => {
             const user = users[order.userEmail] || {};
+            let badgeClass = 'badge-success';
+            let statusText = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+            if (order.status === 'declined') badgeClass = 'badge-declined';
+            else if (order.status === 'pending') badgeClass = 'badge-pending';
             $historyTbody.append(`
                 <tr>
                     <td>${order.orderDate ? new Date(order.orderDate).toLocaleString() : ''}</td>
@@ -437,11 +490,13 @@
                     <td>${order.address || ''}</td>
                     <td>${order.paymentMethod ? order.paymentMethod.toUpperCase() : ''}</td>
                     <td>
-                        <span class="badge badge-success">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                        <span class="badge ${badgeClass}">${statusText}</span>
                     </td>
                 </tr>
             `);
         });
+        renderOrderSummaryCards();
+        renderBestSellerChart();
     }
 
     // Approve Order
@@ -453,10 +508,136 @@
         renderAdminOrders();
     });
 
+    // Decline Order
+    $(document).on('click', '.decline-order', function() {
+        const idx = $(this).data('idx');
+        let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        orders[idx].status = 'declined';
+        localStorage.setItem('orders', JSON.stringify(orders));
+        renderAdminOrders();
+    });
+
     // Tab navigation: re-render on tab switch
     $('#adminTabs a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
         renderAdminOrders();
     });
+
+    function renderOrderSummaryCards() {
+        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        let pending = 0, complete = 0, canceled = 0, declined = 0;
+        orders.forEach(order => {
+            if (order.status === 'pending') pending++;
+            else if (order.status === 'approved' || order.status === 'complete' || order.status === 'completed') complete++;
+            else if (order.status === 'canceled' || order.status === 'cancelled') canceled++;
+            else if (order.status === 'declined') declined++;
+        });
+        const cardsHtml = `
+            <div class="col-12 col-md-3">
+                <div class="card shadow-sm border-0 h-100 text-center p-3" style="background: #fff6f6;">
+                    <div class="mb-2" style="font-size:2.2rem;color:#f39c12;"><i class="uil uil-clock"></i></div>
+                    <div class="fw-bold" style="font-size:1.1rem;">Pending Orders</div>
+                    <div class="display-6 fw-bold" style="color:#f39c12;">${pending}</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card shadow-sm border-0 h-100 text-center p-3" style="background: #f6fff6;">
+                    <div class="mb-2" style="font-size:2.2rem;color:#2ecc71;"><i class="uil uil-check-circle"></i></div>
+                    <div class="fw-bold" style="font-size:1.1rem;">Completed Orders</div>
+                    <div class="display-6 fw-bold" style="color:#2ecc71;">${complete}</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card shadow-sm border-0 h-100 text-center p-3" style="background: #fff6f6;">
+                    <div class="mb-2" style="font-size:2.2rem;color:#e74c3c;"><i class="uil uil-times-circle"></i></div>
+                    <div class="fw-bold" style="font-size:1.1rem;">Canceled Orders</div>
+                    <div class="display-6 fw-bold" style="color:#e74c3c;">${canceled}</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card shadow-sm border-0 h-100 text-center p-3" style="background: #fbeee6;">
+                    <div class="mb-2" style="font-size:2.2rem;color:#ff9800;"><i class="uil uil-ban"></i></div>
+                    <div class="fw-bold" style="font-size:1.1rem;">Declined Orders</div>
+                    <div class="display-6 fw-bold" style="color:#ff9800;">${declined}</div>
+                </div>
+            </div>
+        `;
+        document.getElementById('orderSummaryCards').innerHTML = cardsHtml;
+    }
+
+    function renderBestSellerChart() {
+        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        const menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
+        // Aggregate sales by item name
+        const sales = {};
+        orders.forEach(order => {
+            if (order.items && Array.isArray(order.items)) {
+                order.items.forEach(item => {
+                    if (!sales[item.name]) sales[item.name] = 0;
+                    sales[item.name] += item.quantity;
+                });
+            }
+        });
+        // Sort by quantity sold, take top 6
+        const sorted = Object.entries(sales).sort((a, b) => b[1] - a[1]).slice(0, 6);
+        const labels = sorted.map(([name]) => name);
+        const data = sorted.map(([, qty]) => qty);
+        // If no sales, show placeholder
+        const ctx = document.getElementById('bestSellerChart').getContext('2d');
+        if (window.bestSellerChartInstance) window.bestSellerChartInstance.destroy();
+        window.bestSellerChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels.length ? labels : ['No sales yet'],
+                datasets: [{
+                    label: 'Total Sold',
+                    data: labels.length ? data : [0],
+                    backgroundColor: [
+                        '#ff6b6b','#f39c12','#2ecc71','#3498db','#9b59b6','#e74c3c'
+                    ],
+                    borderRadius: 8,
+                    maxBarThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#333', font: { weight: 'bold' } },
+                        grid: { display: false }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#333' },
+                        grid: { color: '#eee' }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderUsersTable() {
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+        const tbody = $('#usersTable tbody');
+        tbody.empty();
+        const userEntries = Object.entries(users);
+        if (userEntries.length === 0) {
+            tbody.append('<tr><td colspan="3" class="text-center text-muted">No registered users yet.</td></tr>');
+        } else {
+            userEntries.forEach(([email, user]) => {
+                tbody.append(`
+                    <tr>
+                        <td>${user.name || ''}</td>
+                        <td>${email}</td>
+                        <td>${user.registeredAt ? new Date(user.registeredAt).toLocaleString() : ''}</td>
+                    </tr>
+                `);
+            });
+        }
+    }
     </script>
 </body>
 </html>

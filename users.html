@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users Management - Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <style>
+        body {
+            background: #f5f6fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-logo {
+            max-width: 140px;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #34495e;
+            color: white;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        .users-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .users-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .users-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .user-email {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .user-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #e3f9e5;
+            color: #2ecc71;
+        }
+
+        .status-inactive {
+            background: #ffe5e5;
+            color: #e74c3c;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            background: none;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            color: #ff6b6b;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+            outline: none;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            .users-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Restaurant Logo" class="sidebar-logo">
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboard.html">
+                    <i class="uil uil-dashboard"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="users.html" class="active">
+                    <i class="uil uil-users-alt"></i>
+                    Users
+                </a>
+            </li>
+            <li>
+                <a href="orders.html">
+                    <i class="uil uil-shopping-bag"></i>
+                    Orders
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <i class="uil uil-user"></i>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="logout.html">
+                    <i class="uil uil-signout"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Users Management</h1>
+            <div class="search-bar">
+                <i class="uil uil-search"></i>
+                <input type="text" id="searchInput" placeholder="Search users...">
+            </div>
+        </div>
+
+        <div class="users-card">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Users will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const usersTableBody = document.getElementById('usersTableBody');
+            const searchInput = document.getElementById('searchInput');
+            let users = [];
+
+            // Load users from localStorage
+            function loadUsers() {
+                const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+                users = Object.entries(registeredUsers).map(([email, userData]) => ({
+                    email,
+                    ...userData
+                }));
+                renderUsers(users);
+            }
+
+            // Render users in table
+            function renderUsers(usersToRender) {
+                usersTableBody.innerHTML = usersToRender.map(user => {
+                    const profilePhoto = localStorage.getItem(`profilePhoto_${user.email}`);
+                    const initials = user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
+                    
+                    return `
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        ${profilePhoto 
+                                            ? `<img src="${profilePhoto}" alt="${user.name}" onerror="this.onerror=null; this.parentElement.innerHTML='${initials}';">`
+                                            : initials}
+                                    </div>
+                                    <div class="user-details">
+                                        <span class="user-name">${user.name || 'User'}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${user.email}</td>
+                            <td>${user.phone || 'N/A'}</td>
+                            <td>
+                                <span class="user-status status-active">Active</span>
+                            </td>
+                            <td>
+                                <button class="action-btn" title="View Details">
+                                    <i class="uil uil-eye"></i>
+                                </button>
+                                <button class="action-btn" title="Edit User">
+                                    <i class="uil uil-edit"></i>
+                                </button>
+                                <button class="action-btn" title="Delete User">
+                                    <i class="uil uil-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Search functionality
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredUsers = users.filter(user => 
+                    user.name?.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm) ||
+                    user.phone?.toLowerCase().includes(searchTerm)
+                );
+                renderUsers(filteredUsers);
+            });
+
+            // Mobile sidebar toggle
+            function toggleSidebar() {
+                document.querySelector('.sidebar').classList.toggle('show');
+            }
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(e) {
+                const sidebar = document.querySelector('.sidebar');
+                const isMobile = window.innerWidth <= 768;
+                
+                if (isMobile && !e.target.closest('.sidebar') && !e.target.closest('.menu-toggle')) {
+                    sidebar.classList.remove('show');
+                }
+            });
+
+            // Initial load
+            loadUsers();
+
+            // Listen for profile photo updates
+            window.addEventListener('profilePhotoUpdated', function(e) {
+                loadUsers(); // Reload users when a profile photo is updated
+            });
+
+            // Listen for storage changes
+            window.addEventListener('storage', function(e) {
+                if (e.key && e.key.startsWith('profilePhoto_')) {
+                    loadUsers(); // Reload users when any profile photo is updated
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -310,67 +310,103 @@
         border-radius: 10px;
         padding: 25px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        height: fit-content;
+        height: calc(100vh - 120px);
         position: sticky;
         top: 100px;
+        display: flex;
+        flex-direction: column;
     }
-    
+
+    .cart-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
     .cart-items {
-        margin: 20px 0;
-        max-height: 300px;
+        flex: 1;
         overflow-y: auto;
+        margin: 0 -25px;
+        padding: 0 25px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) #f0f0f0;
     }
-    
+
+    .cart-items::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .cart-items::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 3px;
+    }
+
+    .cart-items::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 3px;
+    }
+
     .cart-item {
         display: flex;
         gap: 15px;
-        padding: 10px 0;
+        padding: 15px 0;
         border-bottom: 1px solid var(--border-color);
+        animation: fadeIn 0.3s ease-out;
     }
-    
+
     .cart-item:last-child {
         border-bottom: none;
     }
-    
+
     .cart-item-img {
-        width: 60px;
-        height: 60px;
+        width: 70px;
+        height: 70px;
         border-radius: 8px;
         overflow: hidden;
+        flex-shrink: 0;
     }
-    
+
     .cart-item-img img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.3s ease;
     }
-    
+
+    .cart-item:hover .cart-item-img img {
+        transform: scale(1.05);
+    }
+
     .cart-item-details {
         flex: 1;
+        min-width: 0;
     }
-    
+
     .cart-item-name {
         font-weight: 600;
         margin-bottom: 5px;
         font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-    
+
     .cart-item-price {
         color: var(--primary-color);
         font-weight: 600;
         font-size: 14px;
     }
-    
+
     .cart-item-controls {
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-top: 5px;
+        margin-top: 8px;
     }
-    
+
     .quantity-btn {
-        width: 25px;
-        height: 25px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         background: var(--light-gray);
         border: none;
@@ -379,41 +415,57 @@
         justify-content: center;
         cursor: pointer;
         font-weight: bold;
+        transition: all 0.2s ease;
     }
-    
+
+    .quantity-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
     .cart-item-quantity {
-        min-width: 20px;
+        min-width: 24px;
         text-align: center;
+        font-weight: 600;
     }
-    
+
     .remove-item {
         color: var(--error-color);
         background: none;
         border: none;
         cursor: pointer;
-        margin-left: auto;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
     }
-    
+
+    .remove-item:hover {
+        background: #ffebee;
+    }
+
     .cart-summary {
         margin-top: 20px;
-        border-top: 1px solid var(--border-color);
         padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+        background: white;
     }
-    
+
     .summary-row {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
+        font-size: 14px;
     }
-    
+
     .total {
         font-weight: 700;
         font-size: 18px;
+        color: var(--primary-color);
     }
-    
+
     .checkout-btn {
         width: 100%;
-        padding: 12px;
+        padding: 14px;
         background: var(--primary-color);
         color: white;
         border: none;
@@ -422,20 +474,199 @@
         margin-top: 20px;
         cursor: pointer;
         transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
-    
+
     .checkout-btn:hover {
         background: var(--primary-hover);
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
     }
-    
-    .empty-cart {
-        text-align: center;
-        padding: 20px 0;
-        color: var(--dark-gray);
+
+    .checkout-btn:active {
+        transform: translateY(0);
     }
-    
+
+    .checkout-btn.loading {
+        pointer-events: none;
+        opacity: 0.8;
+    }
+
+    .checkout-btn .spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 0.8s linear infinite;
+    }
+
+    .checkout-btn.loading .spinner {
+        display: block;
+    }
+
+    .checkout-btn.loading span {
+        display: none;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Progress Steps */
+    .checkout-progress {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+        padding: 0 1rem;
+    }
+
+    .checkout-progress::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #ddd;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+    .progress-step {
+        position: relative;
+        z-index: 2;
+        background: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+
+    .progress-step.active {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        background: white;
+    }
+
+    .progress-step.completed {
+        border-color: var(--primary-color);
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .progress-label {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        color: #666;
+        white-space: nowrap;
+    }
+
+    /* Form Validation Styles */
+    .form-control.is-invalid {
+        border-color: var(--error-color);
+        background-image: none;
+    }
+
+    .invalid-feedback {
+        display: none;
+        color: var(--error-color);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control.is-invalid + .invalid-feedback {
+        display: block;
+    }
+
+    /* Payment Method Enhancement */
+    .payment-method {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .payment-method label {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .payment-method:hover label {
+        border-color: var(--primary-color);
+        background: rgba(255, 107, 107, 0.05);
+    }
+
+    .payment-method input[type="radio"]:checked + label {
+        border-color: var(--primary-color);
+        background: rgba(255, 107, 107, 0.1);
+    }
+
+    .payment-method label img {
+        height: 24px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    .payment-method label i {
+        font-size: 1.5rem;
+        color: #666;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .checkout-progress {
+            padding: 0 0.5rem;
+        }
+        
+        .progress-label {
+            font-size: 0.7rem;
+        }
+        
+        .payment-methods {
+            grid-template-columns: 1fr;
+        }
+        
+        .payment-method label {
+            padding: 0.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .checkout-btn {
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+        
+        .progress-step {
+            width: 25px;
+            height: 25px;
+            font-size: 0.9rem;
+        }
+    }
+
     /* Modal */
     .modal {
         display: none;
@@ -617,6 +848,210 @@
             border-radius: 0 !important;
         }
     }
+    .user-avatar-small {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ff6b6b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+    }
+
+    .user-avatar-small:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    }
+
+    .user-avatar-small img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-avatar-large {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: #ff6b6b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+        margin: 0 auto 1rem auto;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+    }
+
+    .user-avatar-large img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar-loading-small,
+    .avatar-loading-large {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .spinner-small {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #ff6b6b;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .spinner-large {
+        width: 30px;
+        height: 30px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #ff6b6b;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .user-avatar-small {
+            width: 36px;
+            height: 36px;
+        }
+
+        .user-avatar-large {
+            width: 64px;
+            height: 64px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .user-avatar-small {
+            width: 32px;
+            height: 32px;
+        }
+
+        .user-avatar-large {
+            width: 56px;
+            height: 56px;
+        }
+    }
+
+    /* Payment Methods Styling */
+    .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .payment-method {
+        position: relative;
+    }
+
+    .payment-method input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .payment-method label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .payment-method input[type="radio"]:checked + label {
+        border-color: var(--primary-color);
+        background: rgba(255, 107, 107, 0.1);
+    }
+
+    .payment-method label img {
+        height: 24px;
+        width: auto;
+    }
+
+    .payment-method label i {
+        font-size: 1.5rem;
+        color: #666;
+    }
+
+    /* Order Summary Styling */
+    .order-summary {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .order-summary-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-summary-item:last-child {
+        border-bottom: none;
+    }
+
+    .total-amount {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 2px solid #ddd;
+        font-size: 1.1rem;
+    }
+
+    /* Form Check Styling */
+    .form-check {
+        flex: 1;
+        text-align: center;
+    }
+
+    .form-check-input {
+        display: none;
+    }
+
+    .form-check-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .form-check-input:checked + .form-check-label {
+        border-color: var(--primary-color);
+        background: rgba(255, 107, 107, 0.1);
+    }
+
+    .form-check-label i {
+        font-size: 1.5rem;
+        color: #666;
+    }
     </style>
 </head>
 <body>
@@ -638,12 +1073,21 @@
                 <span class="cart-count" id="cartCount">0</span>
             </div>
             <div class="user-icon position-relative" id="userIcon" tabindex="0">
-                <i class="uil uil-user"></i>
-                <span id="userInitial" class="user-initial"></span>
+                <div class="user-avatar-small">
+                    <img id="userAvatarSmall" src="" alt="Profile" style="display: none;">
+                    <i class="uil uil-user" id="defaultAvatarSmall"></i>
+                    <div class="avatar-loading-small" id="avatarLoadingSmall" style="display: none;">
+                        <div class="spinner-small"></div>
+                    </div>
+                </div>
                 <div class="user-dropdown" id="userDropdown">
                     <div class="dropdown-header text-center py-2">
-                        <div class="user-avatar mb-2">
-                            <i class="uil uil-user-circle" style="font-size:2.2rem; color:#ff6b6b;"></i>
+                        <div class="user-avatar-large">
+                            <img id="userAvatarLarge" src="" alt="Profile" style="display: none;">
+                            <i class="uil uil-user-circle" id="defaultAvatarLarge"></i>
+                            <div class="avatar-loading-large" id="avatarLoadingLarge" style="display: none;">
+                                <div class="spinner-large"></div>
+                            </div>
                         </div>
                         <div class="user-name fw-bold" id="dropdownUserName"></div>
                         <div class="user-email small text-muted" id="dropdownUserEmail"></div>
@@ -651,7 +1095,7 @@
                     <hr class="my-1">
                     <ul class="list-unstyled mb-0">
                         <li><a href="profile.html" id="profileLink"><i class="uil uil-user"></i> Profile</a></li>
-                        <!--<li><a href="orders.html"><i class="uil uil-receipt"></i> Orders</a></li>-->
+                        <li><a href="orders.html"><i class="uil uil-receipt"></i> Orders</a></li>
                         <li><a href="logout.html"><i class="uil uil-signout"></i> Logout</a></li>
                     </ul>
                 </div>
@@ -675,6 +1119,7 @@
                 <button class="category-btn" data-category="dinner">Dinner</button>
                 <button class="category-btn" data-category="desserts">Desserts</button>
                 <button class="category-btn" data-category="drinks">Drinks</button>
+                <button class="category-btn" data-category="appetizer">Appetizer</button>
             </div>
             
             <div class="menu-items" id="menuItems">
@@ -684,30 +1129,26 @@
         
         <!-- Cart Sidebar -->
         <aside class="cart-sidebar">
-            <h2 class="section-title">Your Order</h2>
+            <div class="cart-header">
+                <h2 class="section-title">Your Order</h2>
+            </div>
             
             <div class="cart-items" id="cartItems">
                 <div class="empty-cart">
+                    <i class="uil uil-shopping-cart-alt"></i>
                     <p>Your cart is empty</p>
-                    <i class="uil uil-shopping-cart-alt" style="font-size: 40px; color: #ccc; margin-top: 10px;"></i>
                 </div>
             </div>
             
             <div class="cart-summary" id="cartSummary" style="display: none;">
-                <div class="summary-row">
-                    <span>Subtotal:</span>
-                    <span id="subtotal"> 0</span>
-                </div>
-                <div class="summary-row">
-                    <span>Delivery Fee:</span>
-                    <span id="deliveryFee">₱ 50</span>
-                </div>
                 <div class="summary-row total">
-                    <span>Total:</span>
-                    <span id="total">₱ 50</span>
+                    <span>Total Amount:</span>
+                    <span id="total">₱ 0</span>
                 </div>
                 
-                <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+                <button class="checkout-btn" id="checkoutBtn">
+                    <span>Proceed to Checkout</span>
+                </button>
             </div>
         </aside>
     </main>
@@ -721,54 +1162,130 @@
                     <button class="btn-close btn-close-white" id="closeModal" aria-label="Close"></button>
                 </div>
                 <form id="checkoutForm" class="p-4">
+                    <!-- Progress Steps -->
+                    <div class="checkout-progress">
+                        <div class="progress-step active" data-step="1">
+                            1
+                            <span class="progress-label">Order Type</span>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            2
+                            <span class="progress-label">Payment</span>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            3
+                            <span class="progress-label">Confirm</span>
+                        </div>
+                    </div>
+
                     <!-- Order Type -->
-                    <div class="mb-3">
-                        <label for="orderType" class="form-label fw-semibold">Order Type</label>
-                        <select id="orderType" class="form-select" required>
-                            <option value="" disabled selected>Select Order Type</option>
-                            <option value="dinein">Dine In</option>
-                            <option value="takeout">Take Out</option>
-                            <option value="delivery">Delivery</option>
-                        </select>
+                    <div class="mb-4" id="step1">
+                        <label class="form-label fw-semibold">Order Type</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="orderType" id="dineIn" value="dinein" required>
+                                <label class="form-check-label" for="dineIn">
+                                    <i class="uil uil-store"></i> Dine In
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="orderType" id="takeOut" value="takeout">
+                                <label class="form-check-label" for="takeOut">
+                                    <i class="uil uil-shopping-bag"></i> Take Out
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="orderType" id="delivery" value="delivery">
+                                <label class="form-check-label" for="delivery">
+                                    <i class="uil uil-truck"></i> Delivery
+                                </label>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">Please select an order type</div>
                     </div>
+
                     <!-- Delivery Address (only for Delivery) -->
-                    <div class="mb-3" id="addressGroup" style="display: none;">
+                    <div class="mb-4" id="addressGroup" style="display: none;">
                         <label for="deliveryAddress" class="form-label fw-semibold">Delivery Address</label>
-                        <textarea id="deliveryAddress" class="form-control" rows="3" placeholder="Enter your delivery address"></textarea>
+                        <textarea id="deliveryAddress" class="form-control" rows="3" placeholder="Enter your complete delivery address"></textarea>
+                        <div class="invalid-feedback">Please enter a delivery address</div>
                     </div>
+
                     <!-- Payment Method -->
-                    <div class="mb-3">
-                        <label for="paymentMethod" class="form-label fw-semibold">Payment Method</label>
-                        <select id="paymentMethod" class="form-select" required>
-                            <option value="" disabled selected>Select Payment Method</option>
-                            <option value="gcash">GCash</option>
-                            <option value="cod" id="codOption">Cash on Delivery</option>
-                            <option value="card">Credit/Debit Card</option>
-                            <option value="upi">UPI Payment</option>
-                        </select>
+                    <div class="mb-4" id="step2" style="display: none;">
+                        <label class="form-label fw-semibold">Payment Method</label>
+                        <div class="payment-methods">
+                            <div class="payment-method" data-method="gcash">
+                                <input type="radio" name="paymentMethod" id="gcash" value="gcash" required>
+                                <label for="gcash">
+                                    <img src="assets/images/gcash.jpg" alt="GCash">
+                                    <span>GCash</span>
+                                </label>
+                            </div>
+                            <div class="payment-method" data-method="cod" style="display: none;">
+                                <input type="radio" name="paymentMethod" id="cod" value="cod">
+                                <label for="cod">
+                                    <i class="uil uil-money-bill"></i>
+                                    <span>Cash on Delivery</span>
+                                </label>
+                            </div>
+                            <div class="payment-method" data-method="card">
+                                <input type="radio" name="paymentMethod" id="card" value="card">
+                                <label for="card">
+                                    <i class="uil uil-credit-card"></i>
+                                    <span>Credit/Debit Card</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">Please select a payment method</div>
                     </div>
+
                     <!-- Card Details -->
-                    <div class="mb-3" id="cardDetails" style="display: none;">
-                        <label for="cardNumber" class="form-label">Card Number</label>
-                        <input type="text" id="cardNumber" class="form-control mb-2" placeholder="1234 5678 9012 3456" pattern="\d{16}" maxlength="16">
-                        <div class="row g-2">
+                    <div class="mb-4" id="cardDetails" style="display: none;">
+                        <div class="card-input-group">
+                            <label for="cardNumber" class="form-label">Card Number</label>
+                            <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <div class="invalid-feedback">Please enter a valid card number</div>
+                        </div>
+                        <div class="row g-2 mt-2">
                             <div class="col">
                                 <label for="expiryDate" class="form-label">Expiry Date</label>
-                                <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY" pattern="\d{2}/\d{2}" maxlength="5">
+                                <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY" maxlength="5">
+                                <div class="invalid-feedback">Please enter a valid expiry date</div>
                             </div>
                             <div class="col">
                                 <label for="cvv" class="form-label">CVV</label>
-                                <input type="text" id="cvv" class="form-control" placeholder="123" pattern="\d{3}" maxlength="3">
+                                <input type="text" id="cvv" class="form-control" placeholder="123" maxlength="3">
+                                <div class="invalid-feedback">Please enter a valid CVV</div>
                             </div>
                         </div>
                     </div>
-                    <!-- UPI Details -->
-                    <div class="mb-3" id="upiDetails" style="display: none;">
-                        <label for="upiId" class="form-label">UPI ID</label>
-                        <input type="text" id="upiId" class="form-control" placeholder="yourname@upi" pattern="^[\w.-]+@[\w.-]+$">
+
+                    <!-- Order Summary -->
+                    <div class="order-summary mb-4" id="step3" style="display: none;">
+                        <h5 class="mb-3">Order Summary</h5>
+                        <div id="checkoutItems"></div>
+                        <div class="total-amount mt-3">
+                            <span>Total Amount:</span>
+                            <span id="checkoutTotal" class="fw-bold">₱ 0</span>
+                        </div>
                     </div>
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary w-100 py-2 mt-2" style="font-size: 1.1rem;">Place Order</button>
+
+                    <!-- Navigation Buttons -->
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary flex-grow-1" id="prevStep" style="display: none;">
+                            <i class="uil uil-arrow-left me-2"></i>
+                            Previous
+                        </button>
+                        <button type="button" class="btn btn-primary flex-grow-1" id="nextStep">
+                            Next
+                            <i class="uil uil-arrow-right ms-2"></i>
+                        </button>
+                        <button type="submit" class="btn btn-primary flex-grow-1" id="submitOrder" style="display: none;">
+                            <div class="spinner"></div>
+                            <span>Place Order</span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -804,97 +1321,26 @@
     <script src="assets/js/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Default menu items (add all your items here)
-            const defaultMenuItems = [
-                {
-                    id: 1,
-                    name: "Chicken Adobo",
-                    description: "Chicken Adobo is a Filipino dish of chicken simmered in a savory and tangy soy sauce and vinegar mixture with garlic and spices.",
-                    price: 120,
-                    category: "lunch",
-                    image: "assets/images/menu/adobo.jpg"
-                },
-                {
-                    id: 2,
-                    name: "Chicken Inasal",
-                    description: "Chicken Inasal is a Filipino grilled chicken dish marinated in a mixture of vinegar, calamansi, garlic, lemongrass, and annatto oil, then grilled to smoky perfection.",
-                    price: 250,
-                    category: "dinner",
-                    image: "assets/images/menu/inasal.jpg"
-                },
-                {
-                    id: 3,
-                    name: "Lechon Karahai",
-                    description: "Lechon Kawali is a Filipino dish made of pork belly that's boiled, seasoned, and deep-fried until golden and crispy on the outside while tender on the inside.",
-                    price: 220,
-                    category: "dinner",
-                    image: "assets/images/menu/karahai.jpg"
-                },
-                {
-                    id: 4,
-                    name: "Paneer Tikka",
-                    description: "Marinated cottage cheese grilled to perfection with bell peppers and onions",
-                    price: 180,
-                    category: "lunch",
-                    image: "assets/images/paneer-tikka.jpg"
-                },
-                {
-                    id: 5,
-                    name: "Gulab Jamun",
-                    description: "Soft milk-solid dumplings soaked in rose-flavored sugar syrup",
-                    price: 80,
-                    category: "desserts",
-                    image: "assets/images/gulab-jamun.jpg"
-                },
-                {
-                    id: 6,
-                    name: "Mango Lassi",
-                    description: "Refreshing yogurt-based drink with sweet mango pulp",
-                    price: 60,
-                    category: "drinks",
-                    image: "assets/images/mango-lassi.jpg"
-                },
-                {
-                    id: 7,
-                    name: "Idli Sambar",
-                    description: "Steamed rice cakes served with lentil soup and coconut chutney",
-                    price: 90,
-                    category: "breakfast",
-                    image: "assets/images/idli.jpg"
-                },
-                {
-                    id: 8,
-                    name: "Chole Bhature",
-                    description: "Spicy chickpea curry served with deep-fried bread",
-                    price: 150,
-                    category: "lunch",
-                    image: "assets/images/chole-bhature.jpg"
-                }
-            ];
-            
-            // Load menu items from localStorage, or use default if not present
-            let menuItems = JSON.parse(localStorage.getItem('menuItems') || 'null');
-            if (!menuItems || !Array.isArray(menuItems) || menuItems.length === 0) {
-                menuItems = defaultMenuItems;
-                localStorage.setItem('menuItems', JSON.stringify(menuItems));
+            // Always load menu items from localStorage (admin.html controls the source of truth)
+            let menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
+            if (!Array.isArray(menuItems) || menuItems.length === 0) {
+                menuItems = [];
             }
-            
             // Cart state
             let cart = [];
-            
+
             // Load menu items
             function loadMenuItems(category = 'all') {
+                // Always refresh from localStorage in case admin added/edited items
+                menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
                 const filteredItems = category === 'all' 
                     ? menuItems 
                     : menuItems.filter(item => item.category === category);
-                
                 $('#menuItems').empty();
-                
                 if (filteredItems.length === 0) {
                     $('#menuItems').html('<p>No items found in this category</p>');
                     return;
                 }
-                
                 filteredItems.forEach(item => {
                     $('#menuItems').append(`
                         <div class="menu-item" data-id="${item.id}">
@@ -915,10 +1361,10 @@
                     `);
                 });
             }
-            
+
             // Initialize menu
             loadMenuItems();
-            
+
             // Category filter
             $('.category-btn').click(function() {
                 $('.category-btn').removeClass('active');
@@ -926,13 +1372,18 @@
                 const category = $(this).data('category');
                 loadMenuItems(category);
             });
-            
+
             // Add to cart
             $(document).on('click', '.add-to-cart', function() {
+                // Always use the latest menuItems from localStorage
+                menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
                 const itemId = parseInt($(this).data('id'));
-                const item = menuItems.find(i => i.id === itemId);
-                
-                const existingItem = cart.find(i => i.id === itemId);
+                const item = menuItems.find(i => i.id == itemId);
+                if (!item) {
+                    showSuccess('Item not found. Please refresh the page.', 'error');
+                    return;
+                }
+                const existingItem = cart.find(i => i.id == itemId);
                 if (existingItem) {
                     existingItem.quantity += 1;
                 } else {
@@ -941,9 +1392,15 @@
                         quantity: 1
                     });
                 }
-                
                 updateCart();
                 showSuccess('Item added to cart');
+            });
+
+            // Listen for menuItems changes from admin.html
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'menuItems') {
+                    loadMenuItems($('.category-btn.active').data('category') || 'all');
+                }
             });
             
             // Update cart display
@@ -954,8 +1411,8 @@
                 if (cart.length === 0) {
                     $('#cartItems').html(`
                         <div class="empty-cart">
+                            <i class="uil uil-shopping-cart-alt"></i>
                             <p>Your cart is empty</p>
-                            <i class="uil uil-shopping-cart-alt" style="font-size: 40px; color: #ccc; margin-top: 10px;"></i>
                         </div>
                     `);
                     $('#cartSummary').hide();
@@ -965,11 +1422,11 @@
                 $('#cartSummary').show();
                 $('#cartItems').empty();
                 
-                let subtotal = 0;
+                let total = 0;
                 
                 cart.forEach(item => {
                     const itemTotal = item.price * item.quantity;
-                    subtotal += itemTotal;
+                    total += itemTotal;
                     
                     $('#cartItems').append(`
                         <div class="cart-item" data-id="${item.id}">
@@ -992,11 +1449,18 @@
                     `);
                 });
                 
-                const deliveryFee = 50;
-                const total = subtotal + deliveryFee;
+                let totalDisplay = total;
+                let warning = '';
+                if (total > 9999999) {
+                    totalDisplay = 9999999;
+                    warning = '<div class="text-danger fw-bold" style="font-size:0.95rem;">Maximum total reached (₱ 9,999,999)</div>';
+                }
                 
-                $('#subtotal').text(`₱ ${subtotal}`);
-                $('#total').text(`₱ ${total}`);
+                $('#total').text(`₱ ${totalDisplay}`);
+                $('#cartSummary .max-warning').remove();
+                if (warning) {
+                    $('#cartSummary').append(`<div class="max-warning">${warning}</div>`);
+                }
             }
             
             // Cart quantity controls
@@ -1020,100 +1484,249 @@
             
             // Remove item from cart
             $(document).on('click', '.remove-item', function() {
-                const itemId = parseInt($(this).data('id'));
-                cart = cart.filter(i => i.id !== itemId);
+                const itemId = Number($(this).data('id'));
+                cart = cart.filter(i => Number(i.id) !== itemId);
                 updateCart();
                 showSuccess('Item removed from cart');
             });
             
-            // Show modal
+            // Show modal with order summary
             $('#checkoutBtn').click(function() {
                 if (cart.length === 0) return;
+                
+                // Update checkout items
+                let checkoutItemsHtml = '';
+                let total = 0;
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    checkoutItemsHtml += `
+                        <div class="order-summary-item">
+                            <span>${item.name} x${item.quantity}</span>
+                            <span>₱ ${itemTotal}</span>
+                        </div>
+                    `;
+                });
+                
+                $('#checkoutItems').html(checkoutItemsHtml);
+                $('#checkoutTotal').text(`₱ ${total}`);
+                
                 $('#checkoutModal').addClass('show');
             });
             
-            // Close modal
-            $('#closeModal').click(function() {
-                $('#checkoutModal').removeClass('show');
+            let currentStep = 1;
+            const totalSteps = 3;
+
+            function updateProgressSteps() {
+                $('.progress-step').removeClass('active completed');
+                $('.progress-step').each(function(index) {
+                    const step = index + 1;
+                    if (step < currentStep) {
+                        $(this).addClass('completed');
+                    } else if (step === currentStep) {
+                        $(this).addClass('active');
+                    }
+                });
+            }
+
+            function showStep(step) {
+                $('#step1, #step2, #step3').hide();
+                $(`#step${step}`).show();
+                
+                $('#prevStep, #nextStep, #submitOrder').hide();
+                
+                if (step > 1) {
+                    $('#prevStep').show();
+                }
+                
+                if (step < totalSteps) {
+                    $('#nextStep').show();
+                } else {
+                    $('#submitOrder').show();
+                }
+                
+                currentStep = step;
+                updateProgressSteps();
+            }
+
+            // Initialize first step
+            showStep(1);
+
+            // Next step handler
+            $('#nextStep').click(function() {
+                if (!validateCurrentStep()) return;
+                showStep(currentStep + 1);
             });
-            
-            // Show/hide address field and payment options based on order type
-            $('#orderType').change(function() {
+
+            // Previous step handler
+            $('#prevStep').click(function() {
+                showStep(currentStep - 1);
+            });
+
+            function validateCurrentStep() {
+                let isValid = true;
+                
+                if (currentStep === 1) {
+                    const orderType = $('input[name="orderType"]:checked').val();
+                    if (!orderType) {
+                        $('#step1 .form-check-input').addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $('#step1 .form-check-input').removeClass('is-invalid');
+                    }
+                    
+                    if (orderType === 'delivery') {
+                        const address = $('#deliveryAddress').val().trim();
+                        if (!address) {
+                            $('#deliveryAddress').addClass('is-invalid');
+                            isValid = false;
+                        } else {
+                            $('#deliveryAddress').removeClass('is-invalid');
+                        }
+                    }
+                }
+                
+                if (currentStep === 2) {
+                    const paymentMethod = $('input[name="paymentMethod"]:checked').val();
+                    if (!paymentMethod) {
+                        $('#step2 .payment-method input').addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $('#step2 .payment-method input').removeClass('is-invalid');
+                    }
+                    
+                    if (paymentMethod === 'card') {
+                        const cardNumber = $('#cardNumber').val().trim();
+                        const expiryDate = $('#expiryDate').val().trim();
+                        const cvv = $('#cvv').val().trim();
+                        
+                        if (!cardNumber || cardNumber.length < 19) {
+                            $('#cardNumber').addClass('is-invalid');
+                            isValid = false;
+                        } else {
+                            $('#cardNumber').removeClass('is-invalid');
+                        }
+                        
+                        if (!expiryDate || !expiryDate.match(/^\d{2}\/\d{2}$/)) {
+                            $('#expiryDate').addClass('is-invalid');
+                            isValid = false;
+                        } else {
+                            $('#expiryDate').removeClass('is-invalid');
+                        }
+                        
+                        if (!cvv || cvv.length < 3) {
+                            $('#cvv').addClass('is-invalid');
+                            isValid = false;
+                        } else {
+                            $('#cvv').removeClass('is-invalid');
+                        }
+                    }
+                }
+                
+                return isValid;
+            }
+
+            // Order type change handler
+            $('input[name="orderType"]').change(function() {
                 const orderType = $(this).val();
                 if (orderType === 'delivery') {
                     $('#addressGroup').show();
                     $('#deliveryAddress').attr('required', true);
-                    $('#paymentMethod option[value="cod"]').show();
+                    $('.payment-method[data-method="cod"]').show();
                 } else {
                     $('#addressGroup').hide();
                     $('#deliveryAddress').removeAttr('required');
-                    // Hide "Cash on Delivery" for Dine In and Take Out
-                    $('#paymentMethod option[value="cod"]').hide();
-                    // If COD is currently selected, reset payment method
-                    if ($('#paymentMethod').val() === 'cod') {
-                        $('#paymentMethod').val('');
+                    $('.payment-method[data-method="cod"]').hide();
+                    if ($('#cod').is(':checked')) {
+                        $('#gcash').prop('checked', true);
                     }
                 }
             });
-            
-            // On page load, ensure COD is hidden if not delivery
-            $(document).ready(function() {
-                $('#paymentMethod option[value="cod"]').hide();
-            });
-            
-            // Payment method toggle
-            $('#paymentMethod').change(function() {
+
+            // Payment method change handler
+            $('input[name="paymentMethod"]').change(function() {
                 const method = $(this).val();
-                $('#cardDetails, #upiDetails').hide();
+                $('#cardDetails').hide();
                 if (method === 'card') {
                     $('#cardDetails').show();
-                } else if (method === 'upi') {
-                    $('#upiDetails').show();
                 }
             });
-            
-            // Place order
+
+            // Card number formatting
+            $('#cardNumber').on('input', function() {
+                let value = $(this).val().replace(/\D/g, '');
+                if (value.length > 0) {
+                    value = value.match(/.{1,4}/g).join(' ');
+                }
+                $(this).val(value);
+            });
+
+            // Expiry date formatting
+            $('#expiryDate').on('input', function() {
+                let value = $(this).val().replace(/\D/g, '');
+                if (value.length > 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2);
+                }
+                $(this).val(value);
+            });
+
+            // CVV numbers only
+            $('#cvv').on('input', function() {
+                $(this).val($(this).val().replace(/\D/g, ''));
+            });
+
+            // Form submission
             $('#checkoutForm').submit(function(e) {
                 e.preventDefault();
                 
-                const userEmail = localStorage.getItem('userEmail');
-                const orderId = '#' + Math.floor(100000 + Math.random() * 900000);
-                const orderData = {
-                    orderId,
-                    userEmail,
-                    items: cart,
-                    orderDate: new Date().toISOString(),
-                    status: 'pending',
-                    orderType: $('#orderType').val(),
-                    address: $('#deliveryAddress').val(),
-                    paymentMethod: $('#paymentMethod').val()
-                };
-                let orders = JSON.parse(localStorage.getItem('orders') || '[]');
-                orders.push(orderData);
-                localStorage.setItem('orders', JSON.stringify(orders));
+                if (!validateCurrentStep()) return;
                 
-                // Generate random order ID
-                $('#orderId').text(orderId);
+                const $submitBtn = $('#submitOrder');
+                $submitBtn.prop('disabled', true).addClass('loading');
                 
-                // Show confirmation
-                $('#checkoutModal').removeClass('show');
-                showOrderConfirmation(orderId, orderData);
-                
-                // Clear cart
-                cart = [];
-                updateCart();
-                
-                // Reset form
-                $('#checkoutForm')[0].reset();
+                // Simulate processing delay
+                setTimeout(() => {
+                    const userEmail = localStorage.getItem('userEmail');
+                    const orderId = '#' + Math.floor(100000 + Math.random() * 900000);
+                    const orderData = {
+                        orderId,
+                        userEmail,
+                        items: cart,
+                        orderDate: new Date().toISOString(),
+                        status: 'pending',
+                        orderType: $('input[name="orderType"]:checked').val(),
+                        address: $('#deliveryAddress').val(),
+                        paymentMethod: $('input[name="paymentMethod"]:checked').val()
+                    };
+                    
+                    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                    orders.push(orderData);
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                    
+                    // Show confirmation
+                    $('#checkoutModal').removeClass('show');
+                    showOrderConfirmation(orderId, orderData);
+                    
+                    // Clear cart
+                    cart = [];
+                    updateCart();
+                    
+                    // Reset form and state
+                    $('#checkoutForm')[0].reset();
+                    currentStep = 1;
+                    showStep(1);
+                    $submitBtn.prop('disabled', false).removeClass('loading');
+                }, 1500);
             });
             
             // Show success message
-            function showSuccess(message) {
+            function showSuccess(message, type = 'success') {
                 $('#successText').text(message);
-                $('#successMessage').addClass('show');
+                $('#successMessage').addClass(type === 'error' ? 'error' : 'show');
                 
                 setTimeout(() => {
-                    $('#successMessage').removeClass('show');
+                    $('#successMessage').removeClass(type === 'error' ? 'error' : 'show');
                 }, 3000);
             }
             
@@ -1165,14 +1778,32 @@
             }
         });
 
-        // Fill user info in dropdown
+        // Update user info in dropdown
         $(function() {
             const user = getLoggedInUser();
+            const profilePhoto = localStorage.getItem(`profilePhoto_${user.email}`);
+            
+            // Update small avatar
+            if (profilePhoto) {
+                $('#userAvatarSmall').attr('src', profilePhoto).show();
+                $('#defaultAvatarSmall').hide();
+            } else {
+                $('#userAvatarSmall').hide();
+                $('#defaultAvatarSmall').show();
+            }
+            
+            // Update large avatar in dropdown
+            if (profilePhoto) {
+                $('#userAvatarLarge').attr('src', profilePhoto).show();
+                $('#defaultAvatarLarge').hide();
+            } else {
+                $('#userAvatarLarge').hide();
+                $('#defaultAvatarLarge').show();
+            }
+            
             $('#dropdownUserName').text(user.name || 'User');
             $('#dropdownUserEmail').text(user.email || '');
             $('#userInitial').text(user.name ? user.name.charAt(0).toUpperCase() : (user.email ? user.email.charAt(0).toUpperCase() : 'U'));
-            // Optionally, set profile link to include user info
-            $('#profileLink').attr('href', 'profile.html');
         });
 
         function showOrderConfirmation(orderId, orderData) {
@@ -1211,6 +1842,113 @@
             const user = getLoggedInUser();
             $('#profileName').text(user.name || 'User');
             $('#profileEmail').text(user.email || '');
+        });
+
+        // Enhanced Profile Photo Update Handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const userAvatarSmall = document.getElementById('userAvatarSmall');
+            const defaultAvatarSmall = document.getElementById('defaultAvatarSmall');
+            const userAvatarLarge = document.getElementById('userAvatarLarge');
+            const defaultAvatarLarge = document.getElementById('defaultAvatarLarge');
+            const avatarLoadingSmall = document.getElementById('avatarLoadingSmall');
+            const avatarLoadingLarge = document.getElementById('avatarLoadingLarge');
+            const user = getLoggedInUser();
+
+            function showLoading() {
+                avatarLoadingSmall.style.display = 'flex';
+                avatarLoadingLarge.style.display = 'flex';
+            }
+
+            function hideLoading() {
+                avatarLoadingSmall.style.display = 'none';
+                avatarLoadingLarge.style.display = 'none';
+            }
+
+            function updateProfilePhotos() {
+                if (user && user.email) {
+                    showLoading();
+                    
+                    const profilePhoto = localStorage.getItem(`profilePhoto_${user.email}`);
+                    if (profilePhoto) {
+                        // Preload images
+                        const smallImg = new Image();
+                        const largeImg = new Image();
+                        
+                        smallImg.onload = function() {
+                            userAvatarSmall.src = profilePhoto;
+                            userAvatarSmall.style.display = 'block';
+                            defaultAvatarSmall.style.display = 'none';
+                            hideLoading();
+                        };
+                        
+                        smallImg.onerror = function() {
+                            console.error('Error loading small avatar');
+                            userAvatarSmall.style.display = 'none';
+                            defaultAvatarSmall.style.display = 'block';
+                            hideLoading();
+                        };
+                        
+                        largeImg.onload = function() {
+                            userAvatarLarge.src = profilePhoto;
+                            userAvatarLarge.style.display = 'block';
+                            defaultAvatarLarge.style.display = 'none';
+                        };
+                        
+                        largeImg.onerror = function() {
+                            console.error('Error loading large avatar');
+                            userAvatarLarge.style.display = 'none';
+                            defaultAvatarLarge.style.display = 'block';
+                        };
+                        
+                        smallImg.src = profilePhoto;
+                        largeImg.src = profilePhoto;
+                    } else {
+                        userAvatarSmall.style.display = 'none';
+                        userAvatarLarge.style.display = 'none';
+                        defaultAvatarSmall.style.display = 'block';
+                        defaultAvatarLarge.style.display = 'block';
+                        hideLoading();
+                    }
+                }
+            }
+
+            // Listen for profile photo updates
+            window.addEventListener('profilePhotoUpdated', function(e) {
+                if (e.detail.email === user.email) {
+                    updateProfilePhotos();
+                }
+            });
+
+            // Listen for storage changes
+            window.addEventListener('storage', function(e) {
+                if (e.key === `profilePhoto_${user.email}` || e.key === 'lastProfilePhotoUpdate') {
+                    updateProfilePhotos();
+                }
+            });
+
+            // Initial update
+            updateProfilePhotos();
+        });
+
+        // Logout handler
+        $('#logoutLink').click(function(e) {
+            e.preventDefault();
+            localStorage.setItem('logout', Date.now());
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            closeDropdown();
+            window.location.href = 'index.html';
+        });
+
+        // Listen for logout flag
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'logout') {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                window.location.href = 'index.html';
+            }
         });
 
     </script>

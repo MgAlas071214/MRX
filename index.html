@@ -16,6 +16,299 @@
     <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    <style>
+    /* Header Right Styles */
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    /* User Dropdown Styles */
+    .user-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .user-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+    }
+
+    .user-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ff6b6b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-avatar i {
+        font-size: 24px;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        background: #fff;
+        min-width: 180px;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s cubic-bezier(.4,2,.6,1);
+        padding: 0;
+    }
+
+    .dropdown-content.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .dropdown-logout-wrapper,
+    .dropdown-login-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 0 16px 0;
+    }
+
+    .logout-btn, .dropdown-btn {
+        background: #ff6b6b;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: background 0.2s;
+        margin-bottom: 10px;
+        text-decoration: none;
+    }
+
+    .logout-btn i, .dropdown-btn i {
+        font-size: 1.2rem;
+    }
+
+    .logout-btn:hover, .dropdown-btn:hover {
+        background: #e55a5a;
+    }
+
+    .dropdown-login-wrapper {
+        padding-top: 16px;
+    }
+
+    .dropdown-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        background: #f8f9fa;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .user-avatar-large {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #ff6b6b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow: hidden;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .user-avatar-large img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-avatar-large i {
+        font-size: 32px;
+    }
+
+    .user-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-details span {
+        line-height: 1.4;
+    }
+
+    .user-details .user-email {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .dropdown-menu {
+        padding: 8px 0;
+    }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .dropdown-item i {
+        font-size: 1.1rem;
+        margin-right: 12px;
+        color: #666;
+        width: 20px;
+        text-align: center;
+    }
+
+    .dropdown-item:hover {
+        background: #f8f9fa;
+        color: #ff6b6b;
+    }
+
+    .dropdown-item:hover i {
+        color: #ff6b6b;
+    }
+
+    .dropdown-divider {
+        height: 1px;
+        background: #eee;
+        margin: 8px 0;
+    }
+
+    /* Mobile Dropdown Styles */
+    @media (max-width: 768px) {
+        .header-right {
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+        }
+
+        .user-avatar i {
+            font-size: 20px;
+        }
+
+        .dropdown-content {
+            position: fixed;
+            top: auto;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            min-width: 100%;
+            border-radius: 16px 16px 0 0;
+            transform: translateY(100%);
+            max-height: 40vh;
+            padding: 0;
+        }
+
+        .dropdown-content.show {
+            transform: translateY(0);
+        }
+
+        .dropdown-logout-wrapper, .dropdown-login-wrapper {
+            padding: 32px 0 24px 0;
+        }
+
+        .dropdown-header {
+            padding: 15px;
+        }
+
+        .user-info {
+            padding: 10px;
+        }
+
+        .dropdown-menu {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            padding: 15px 20px;
+        }
+    }
+
+    /* Overlay for mobile */
+    .dropdown-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .dropdown-overlay.show {
+        display: block;
+        opacity: 1;
+    }
+
+    /* Animation for dropdown items */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .dropdown-item {
+        animation: slideIn 0.3s ease forwards;
+        animation-delay: calc(var(--item-index) * 0.1s);
+    }
+    </style>
 </head>
 
 <body class="body-fixed">
@@ -51,13 +344,26 @@
                 </button>
               </form>
               <div class="user-dropdown">
-                <a href="javascript:void(0)" class="header-btn user-btn" aria-label="User Profile">
-                  <i class="uil uil-user-md"></i>
-                </a>
-                <div class="dropdown-content">
-                  <a href="register.html" id="registerLink">Register</a>
-                  <a href="login.html" id="loginLink">Login</a>
-                  <a href="javascript:void(0)" id="logoutLink" style="display:none;">Logout</a>
+                <button class="user-btn" id="userDropdownBtn" aria-label="User Profile">
+                  <div class="user-avatar">
+                    <img id="userAvatar" src="" alt="Profile" style="display: none;">
+                    <i class="uil uil-user" id="defaultAvatar"></i>
+                  </div>
+                </button>
+                <div class="dropdown-content" id="userDropdownContent">
+                  <div class="dropdown-logout-wrapper" id="dropdownLogoutWrapper">
+                    <button id="logoutLink" class="logout-btn">
+                      <i class="uil uil-signout"></i> Logout
+                    </button>
+                  </div>
+                  <div class="dropdown-login-wrapper" id="dropdownLoginWrapper">
+                    <a href="register.html" class="dropdown-btn">
+                      <i class="uil uil-user-plus"></i> Register
+                    </a>
+                    <a href="login.html" class="dropdown-btn">
+                      <i class="uil uil-signin"></i> Login
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -999,54 +1305,160 @@
     <script src="main.js"></script>
     <!-- Update the existing script section in your HTML -->
 <script>
-    $(document).ready(function() {
-        // Check login status
-        function checkLoginStatus() {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                $('#loginLink').hide();
-                $('#registerLink').hide();
-                $('#logoutLink').show();
+    document.addEventListener('DOMContentLoaded', function() {
+        const userDropdownBtn = document.getElementById('userDropdownBtn');
+        const userDropdownContent = document.getElementById('userDropdownContent');
+        const logoutLink = document.getElementById('logoutLink');
+        const userAvatar = document.getElementById('userAvatar');
+        const defaultAvatar = document.getElementById('defaultAvatar');
+        const dropdownLogoutWrapper = document.getElementById('dropdownLogoutWrapper');
+        const dropdownLoginWrapper = document.getElementById('dropdownLoginWrapper');
+        let overlay = document.querySelector('.dropdown-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'dropdown-overlay';
+            document.body.appendChild(overlay);
+        }
+
+        // Accessibility: ARIA attributes
+        userDropdownBtn.setAttribute('aria-haspopup', 'true');
+        userDropdownBtn.setAttribute('aria-expanded', 'false');
+        userDropdownContent.setAttribute('role', 'menu');
+        userDropdownContent.setAttribute('aria-label', 'User menu');
+
+        function updateAvatar() {
+            const userEmail = localStorage.getItem('userEmail');
+            const profilePhoto = localStorage.getItem(`profilePhoto_${userEmail}`);
+            if (profilePhoto) {
+                userAvatar.src = profilePhoto;
+                userAvatar.style.display = 'block';
+                defaultAvatar.style.display = 'none';
             } else {
-                $('#loginLink').show();
-                $('#registerLink').show();
-                $('#logoutLink').hide();
+                userAvatar.style.display = 'none';
+                defaultAvatar.style.display = 'block';
             }
         }
 
-        // Initial check
-        checkLoginStatus();
-
-        // Logout functionality
-        function logout() {
-            localStorage.removeItem('isLoggedIn');
-            $('.dropdown-content').hide();
-            checkLoginStatus();
-            // Redirect to home page after logout
-            window.location.href = 'index.html';
+        function updateDropdown() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (isLoggedIn) {
+                dropdownLogoutWrapper.style.display = 'flex';
+                dropdownLoginWrapper.style.display = 'none';
+            } else {
+                dropdownLogoutWrapper.style.display = 'none';
+                dropdownLoginWrapper.style.display = 'flex';
+            }
         }
 
-        // Logout click handler
-        $(document).on('click', '#logoutLink', function(e) {
-            e.preventDefault();
-            logout();
-        });
-
-        // User dropdown
-        $('.user-btn').click(function(e) {
+        function openDropdown() {
+            updateDropdown();
+            userDropdownContent.classList.add('show');
+            userDropdownBtn.setAttribute('aria-expanded', 'true');
+            if (window.innerWidth <= 768) {
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+            // Focus first actionable item for accessibility
+            setTimeout(() => {
+                const firstBtn = userDropdownContent.querySelector('a, button');
+                if (firstBtn) firstBtn.focus();
+            }, 100);
+        }
+        function closeDropdown() {
+            userDropdownContent.classList.remove('show');
+            userDropdownBtn.setAttribute('aria-expanded', 'false');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        function toggleDropdown() {
+            const isOpen = userDropdownContent.classList.contains('show');
+            if (isOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+        userDropdownBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            $('.dropdown-content').toggle();
+            toggleDropdown();
         });
-
-        // Close dropdown when clicking outside
-        $(document).click(function(event) {
-            if (!$(event.target).closest('.user-dropdown').length) {
-                $('.dropdown-content').hide();
+        userDropdownBtn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                openDropdown();
             }
         });
-
-        // Close dropdown on menu click
-        $('.dropdown-content a').click(function() {
-            $('.dropdown-content').hide();
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-dropdown')) {
+                closeDropdown();
+            }
+        });
+        overlay.addEventListener('click', closeDropdown);
+        userDropdownContent.addEventListener('keydown', function(e) {
+            // Close on Escape
+            if (e.key === 'Escape') {
+                closeDropdown();
+                userDropdownBtn.focus();
+            }
+            // Keyboard navigation (Tab/Shift+Tab)
+            if (e.key === 'Tab') {
+                const focusable = userDropdownContent.querySelectorAll('a, button');
+                if (focusable.length === 0) return;
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                } else if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                }
+            }
+        });
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.setItem('logout', Date.now());
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userRole');
+                closeDropdown();
+                updateAvatar();
+                updateDropdown();
+                window.location.href = 'index.html';
+            });
+        }
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (window.innerWidth > 768) {
+                    overlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            }, 250);
+        });
+        updateAvatar();
+        updateDropdown();
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'logout') {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userRole');
+                closeDropdown();
+                updateAvatar();
+                updateDropdown();
+                window.location.href = 'index.html';
+            }
+            if (e.key && e.key.startsWith('profilePhoto_')) {
+                updateAvatar();
+            }
+            if (['isLoggedIn', 'userEmail', 'userName', 'userRole'].includes(e.key)) {
+                updateDropdown();
+                updateAvatar();
+            }
         });
     });
 </script>

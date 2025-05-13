@@ -13,169 +13,469 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .profile-container {
-            max-width: 420px;
-            margin: 60px auto;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(30,30,47,0.12);
-            padding: 2.5rem 2rem;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .profile-header {
+            margin-bottom: 2rem;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: #f8f9fa;
+            color: #ff6b6b;
+        }
+        .profile-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        .profile-avatar-section {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+        }
+            .profile-avatar-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
         }
         .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background: #ff6b6b;
-            color: #fff;
+            width: 100%;
+            height: 100%;
+            background: white;
+            color: #ff6b6b;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            margin: 0 auto 1rem auto;
+            font-size: 4rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
-        .profile-title {
-            text-align: center;
-            font-weight: 700;
+        .profile-avatar:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-actions {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .upload-btn, .remove-photo-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: white;
+        }
+        .upload-btn {
+            background: #ff6b6b;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .remove-photo-btn {
+            background: #dc3545;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+        }
+        .upload-btn:hover, .remove-photo-btn:hover {
+            transform: scale(1.1);
+        }
+        .profile-info {
+            margin-top: 1rem;
+        }
+        .profile-info h2 {
+            margin: 0;
             font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #1e1e2f;
+            font-weight: 600;
         }
-        .form-label {
+        .profile-info p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+        }
+        .profile-form-container {
+            padding: 2rem;
+        }
+        .profile-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
             font-weight: 500;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
         .form-control:focus {
             border-color: #ff6b6b;
-            box-shadow: 0 0 0 2px #ff6b6b22;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+            outline: none;
         }
-        .edit-btn, .save-btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 1.1rem;
+        .form-control[readonly] {
+            background: #f8f9fa;
+            cursor: not-allowed;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
-            margin-top: 1.2rem;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .edit-btn {
+        .btn-primary {
             background: #ff6b6b;
-            color: #fff;
-            border: none;
+            color: white;
         }
-        .edit-btn:hover { background: #ff5252; }
-        .save-btn {
-            background: #2ecc71;
-            color: #fff;
-            border: none;
+        .btn-primary:hover {
+            background: #ff5252;
         }
-        .save-btn:hover { background: #27ae60; }
-        .cancel-btn {
-            background: #eee;
+        .btn-secondary {
+            background: #f8f9fa;
             color: #333;
-            border: none;
+        }
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        .avatar-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 0.5rem;
-        }
-        .success-message, .error-message {
-            text-align: center;
-            margin-top: 1rem;
-            font-weight: 500;
-            display: none;
-        }
-        .success-message { color: #2ecc71; }
-        .error-message { color: #e74c3c; }
-        @media (max-width: 600px) {
-            .profile-container { padding: 1.5rem 0.5rem; }
-        }
-        #goBackBtn {
-            display: inline-flex;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
             align-items: center;
-            gap: 6px;
-            font-weight: 500;
-            font-size: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(30,30,47,0.04);
-            transition: background 0.2s, color 0.2s;
+            justify-content: center;
+            border-radius: 50%;
         }
-        #goBackBtn:hover, #goBackBtn:focus {
-            background: #ff6b6b;
-            color: #fff;
-            border-color: #ff6b6b;
-            text-decoration: none;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        @media (max-width: 600px) {
-            #goBackBtn {
-                width: 100%;
-                justify-content: center;
-                margin-bottom: 1rem;
+        .upload-error {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #dc3545;
+            font-size: 0.85rem;
+            text-align: center;
+            width: 100%;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .profile-container {
+                margin: 1rem auto;
+            }
+            .profile-avatar-section {
+                padding: 2rem 1rem;
+            }
+            .profile-avatar-container {
+                width: 140px;
+                height: 140px;
+            }
+            .profile-avatar {
+                font-size: 3.5rem;
+            }
+            .upload-btn, .remove-photo-btn {
+                width: 36px;
+                height: 36px;
+            }
+            .profile-form-container {
+                padding: 1.5rem;
             }
         }
-        .recent-orders {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 1.2rem 1rem;
-            box-shadow: 0 2px 8px rgba(30,30,47,0.04);
+        @media (max-width: 480px) {
+            .profile-avatar-container {
+                width: 120px;
+                height: 120px;
+            }
+            .profile-avatar {
+                font-size: 3rem;
+            }
+            .upload-btn, .remove-photo-btn {
+                width: 32px;
+                height: 32px;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
         }
-        .order-card {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(30,30,47,0.06);
-            padding: 1rem 1rem 0.7rem 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.98rem;
+        
+        /* New styles for enhanced features */
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
         }
-        .order-card .order-id {
+        
+        .password-toggle:hover {
             color: #ff6b6b;
-            font-weight: 600;
         }
-        .order-card .order-status {
-            font-weight: 500;
-            color: #2ecc71;
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
         }
-        .order-card .order-date {
-            color: #888;
-            font-size: 0.93rem;
+        
+        .form-section h3 {
+            margin-bottom: 1rem;
+            color: #333;
+            font-size: 1.2rem;
         }
-        .order-card ul {
-            margin: 0.5rem 0 0 1.2rem;
-            padding: 0;
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
         }
-        @media (max-width: 600px) {
-            .recent-orders { padding: 1rem 0.3rem; }
-            .order-card { padding: 0.8rem 0.5rem 0.6rem 0.5rem; }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .password-strength {
+            height: 4px;
+            margin-top: 0.5rem;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .password-strength.weak { background: #dc3545; width: 33%; }
+        .password-strength.medium { background: #ffc107; width: 66%; }
+        .password-strength.strong { background: #28a745; width: 100%; }
+        
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .password-requirements ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0.5rem 0 0;
+        }
+        
+        .password-requirements li {
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .password-requirements li i {
+            font-size: 0.75rem;
+        }
+        
+        .password-requirements li.valid {
+            color: #28a745;
+        }
+        
+        .password-requirements li.invalid {
+            color: #dc3545;
+        }
+        
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 1rem;
+            }
+            
+            .profile-avatar-section {
+                padding: 1.5rem 1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
     <div class="profile-container">
-        <a href="dashboard.html" class="btn btn-outline-primary mb-3" id="goBackBtn">
-            <i class="uil uil-arrow-left"></i> Back to Dashboard
-        </a>
-        <div class="profile-avatar" id="profileAvatar">
-            <i class="uil uil-user"></i>
+        <div class="profile-header">
+            <a href="dashboard.html" class="back-btn" id="goBackBtn">
+                <i class="uil uil-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </a>
         </div>
-        <div class="profile-title">My Profile</div>
-        <form id="profileForm" autocomplete="off">
-            <div class="mb-3">
-                <label for="profileName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="profileName" required disabled>
+        
+        <div class="profile-content">
+            <div class="profile-avatar-section">
+                <div class="profile-avatar-container">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <img id="profileImage" src="" alt="Profile" style="display: none;">
+                        <i class="uil uil-user" id="defaultAvatar"></i>
+                        <div class="avatar-loading" id="avatarLoading" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                    <div class="avatar-actions">
+                        <label for="profilePhotoUpload" class="upload-btn" title="Change Profile Photo">
+                            <i class="uil uil-camera"></i>
+                        </label>
+                        <button class="remove-photo-btn" id="removePhotoBtn" title="Remove Photo" style="display: none;">
+                            <i class="uil uil-trash-alt"></i>
+                        </button>
+                    </div>
+                    <input type="file" id="profilePhotoUpload" accept="image/*" style="display: none;">
+                    <div class="upload-error" id="uploadError"></div>
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">Loading...</h2>
+                    <p id="profileEmail" class="text-muted">Loading...</p>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="profileEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="profileEmail" required disabled>
-            </div>
-            <div class="mb-3">
-                <label for="profilePassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="profilePassword" minlength="6" placeholder="******" disabled>
-            </div>
-            <button type="button" class="edit-btn" id="editProfileBtn"><i class="uil uil-edit"></i> Edit Profile</button>
-            <button type="submit" class="save-btn" id="saveProfileBtn" style="display:none;"><i class="uil uil-save"></i> Save Changes</button>
-            <button type="button" class="cancel-btn" id="cancelEditBtn" style="display:none;">Cancel</button>
-            <div class="success-message" id="profileSuccess">Profile updated successfully!</div>
-            <div class="error-message" id="profileError"></div>
-        </form>
-        <div class="recent-orders mt-4">
-            <h5 class="mb-3" style="font-weight:600;">Recent Orders</h5>
-            <div id="ordersList">
-                <!-- Orders will be loaded here -->
+
+            <div class="profile-form-container">
+                <form id="profileForm" class="profile-form">
+                    <div class="form-section">
+                        <h3>Personal Information</h3>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <div class="input-group">
+                                <i class="uil uil-user input-icon"></i>
+                                <input type="text" id="name" name="name" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <div class="input-group">
+                                <i class="uil uil-envelope input-icon"></i>
+                                <input type="email" id="email" name="email" class="form-control" required readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <div class="input-group">
+                                <i class="uil uil-phone input-icon"></i>
+                                <input type="tel" id="phone" name="phone" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Change Password</h3>
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <div class="input-group">
+                                <i class="uil uil-lock input-icon"></i>
+                                <input type="password" id="currentPassword" name="currentPassword" class="form-control">
+                                <i class="uil uil-eye password-toggle" data-target="currentPassword"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <div class="input-group">
+                                <i class="uil uil-lock input-icon"></i>
+                                <input type="password" id="newPassword" name="newPassword" class="form-control">
+                                <i class="uil uil-eye password-toggle" data-target="newPassword"></i>
+                            </div>
+                            <div class="password-strength" id="passwordStrength"></div>
+                            <div class="password-requirements">
+                                <ul>
+                                    <li id="lengthReq"><i class="uil uil-times-circle"></i> At least 8 characters</li>
+                                    <li id="uppercaseReq"><i class="uil uil-times-circle"></i> One uppercase letter</li>
+                                    <li id="lowercaseReq"><i class="uil uil-times-circle"></i> One lowercase letter</li>
+                                    <li id="numberReq"><i class="uil uil-times-circle"></i> One number</li>
+                                    <li id="specialReq"><i class="uil uil-times-circle"></i> One special character</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <div class="input-group">
+                                <i class="uil uil-lock input-icon"></i>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+                                <i class="uil uil-eye password-toggle" data-target="confirmPassword"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="saveBtn">Save Changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -185,22 +485,52 @@
     function getLoggedInUser() {
         const email = localStorage.getItem('userEmail');
         let name = '';
+        let phone = '';
         let password = '';
         const users = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
         if (users[email]) {
             name = users[email].name || email.split('@')[0];
+            phone = users[email].phone || '';
             password = users[email].password || '';
         } else {
             name = email ? email.split('@')[0] : '';
         }
-        return { email, name, password };
+        return { email, name, phone, password };
     }
-    function setLoggedInUser({ email, name, password }) {
+
+    function setLoggedInUser({ email, name, phone, password }) {
         let users = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
         if (!users[email]) users[email] = {};
         users[email].name = name;
+        users[email].phone = phone;
         users[email].password = password;
         localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+
+    // Phone number validation
+    function validatePhoneNumber(phone) {
+        // Remove any non-digit characters
+        const cleaned = phone.replace(/\D/g, '');
+        
+        // Check if the cleaned number is between 10 and 15 digits
+        if (cleaned.length < 10 || cleaned.length > 15) {
+            return false;
+        }
+        
+        // Check if it starts with a valid country code or local number
+        const validStarts = ['09', '63', '+63'];
+        return validStarts.some(start => cleaned.startsWith(start.replace(/\D/g, '')));
+    }
+
+    // Format phone number
+    function formatPhoneNumber(phone) {
+        const cleaned = phone.replace(/\D/g, '');
+        if (cleaned.startsWith('63')) {
+            return '+63 ' + cleaned.slice(2).replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
+        } else if (cleaned.startsWith('09')) {
+            return '+63 ' + cleaned.slice(1).replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
+        }
+        return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
     }
 
     // Populate profile info
@@ -210,88 +540,264 @@
             window.location.href = 'login.html';
             return;
         }
-        $('#profileName').val(user.name);
-        $('#profileEmail').val(user.email);
-        $('#profilePassword').val(user.password);
-        $('#profileAvatar').html(user.name ? user.name.charAt(0).toUpperCase() : '<i class="uil uil-user"></i>');
+        $('#profileName').text(user.name);
+        $('#profileEmail').text(user.email);
+        $('#name').val(user.name);
+        $('#email').val(user.email);
+        $('#phone').val(user.phone || '');
+        
+        // Load profile photo
+        const profilePhoto = localStorage.getItem(`profilePhoto_${user.email}`);
+        if (profilePhoto) {
+            $('#profileImage').attr('src', profilePhoto).show();
+            $('#defaultAvatar').hide();
+            $('#removePhotoBtn').show();
+        } else {
+            $('#profileImage').hide();
+            $('#defaultAvatar').show();
+            $('#removePhotoBtn').hide();
+        }
     }
 
-    // Edit mode
-    $('#editProfileBtn').click(function() {
-        $('#profileName, #profilePassword').prop('disabled', false);
-        $('#editProfileBtn').hide();
-        $('#saveProfileBtn, #cancelEditBtn').show();
-        $('#profileSuccess, #profileError').hide();
-    });
-    $('#cancelEditBtn').click(function() {
-        loadProfile();
-        $('#profileName, #profilePassword').prop('disabled', true);
-        $('#editProfileBtn').show();
-        $('#saveProfileBtn, #cancelEditBtn').hide();
-        $('#profileSuccess, #profileError').hide();
+    // Handle phone number input
+    $('#phone').on('input', function() {
+        let value = $(this).val().replace(/\D/g, '');
+        if (value.length > 0) {
+            if (!value.startsWith('09') && !value.startsWith('63')) {
+                value = '09' + value;
+            }
+            $(this).val(formatPhoneNumber(value));
+        }
     });
 
-    // Save changes
+    // Password validation functions
+    function validatePassword(password) {
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /[0-9]/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+        
+        return requirements;
+    }
+
+    function updatePasswordStrength(password) {
+        const requirements = validatePassword(password);
+        const strengthBar = $('#passwordStrength');
+        const validCount = Object.values(requirements).filter(Boolean).length;
+        
+        // Update requirements UI
+        $('#lengthReq').toggleClass('valid', requirements.length).find('i').toggleClass('uil-check-circle uil-times-circle', requirements.length);
+        $('#uppercaseReq').toggleClass('valid', requirements.uppercase).find('i').toggleClass('uil-check-circle uil-times-circle', requirements.uppercase);
+        $('#lowercaseReq').toggleClass('valid', requirements.lowercase).find('i').toggleClass('uil-check-circle uil-times-circle', requirements.lowercase);
+        $('#numberReq').toggleClass('valid', requirements.number).find('i').toggleClass('uil-check-circle uil-times-circle', requirements.number);
+        $('#specialReq').toggleClass('valid', requirements.special).find('i').toggleClass('uil-check-circle uil-times-circle', requirements.special);
+        
+        // Update strength bar
+        strengthBar.removeClass('weak medium strong');
+        if (validCount <= 2) {
+            strengthBar.addClass('weak');
+        } else if (validCount <= 4) {
+            strengthBar.addClass('medium');
+        } else {
+            strengthBar.addClass('strong');
+        }
+    }
+
+    // Toggle password visibility
+    $('.password-toggle').click(function() {
+        const targetId = $(this).data('target');
+        const input = $(`#${targetId}`);
+        const type = input.attr('type') === 'password' ? 'text' : 'password';
+        input.attr('type', type);
+        $(this).toggleClass('uil-eye uil-eye-slash');
+    });
+
+    // Password strength check
+    $('#newPassword').on('input', function() {
+        const password = $(this).val();
+        updatePasswordStrength(password);
+    });
+
+    // Show loading overlay
+    function showLoading() {
+        $('#loadingOverlay').fadeIn(200);
+    }
+
+    // Hide loading overlay
+    function hideLoading() {
+        $('#loadingOverlay').fadeOut(200);
+    }
+
+    // Enhanced form submission
     $('#profileForm').submit(function(e) {
         e.preventDefault();
-        const name = $('#profileName').val().trim();
-        const email = $('#profileEmail').val().trim();
-        const password = $('#profilePassword').val();
-        if (!name || !email || password.length < 6) {
-            $('#profileError').text('Please fill all fields correctly.').show();
-            $('#profileSuccess').hide();
+        showLoading();
+        
+        const name = $('#name').val().trim();
+        const email = $('#email').val().trim();
+        const phone = $('#phone').val().trim();
+        const currentPassword = $('#currentPassword').val();
+        const newPassword = $('#newPassword').val();
+        const confirmPassword = $('#confirmPassword').val();
+        
+        // Validate name
+        if (!name) {
+            showError('Please enter your name');
+            hideLoading();
             return;
         }
-        setLoggedInUser({ email, name, password });
-        $('#profileName, #profilePassword').prop('disabled', true);
-        $('#editProfileBtn').show();
-        $('#saveProfileBtn, #cancelEditBtn').hide();
-        $('#profileSuccess').show();
-        $('#profileError').hide();
-        $('#profileAvatar').html(name.charAt(0).toUpperCase());
+
+        // Validate phone
+        if (!phone) {
+            showError('Please enter your phone number');
+            hideLoading();
+            return;
+        }
+
+        if (!validatePhoneNumber(phone)) {
+            showError('Please enter a valid phone number (e.g., 09XX XXX XXXX)');
+            hideLoading();
+            return;
+        }
+
+        // Password change validation
+        if (currentPassword || newPassword || confirmPassword) {
+            const user = getLoggedInUser();
+            
+            if (currentPassword !== user.password) {
+                showError('Current password is incorrect');
+                hideLoading();
+                return;
+            }
+            
+            if (newPassword) {
+                const requirements = validatePassword(newPassword);
+                if (!Object.values(requirements).every(Boolean)) {
+                    showError('New password does not meet requirements');
+                    hideLoading();
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    showError('New passwords do not match');
+                    hideLoading();
+                    return;
+                }
+            }
+        }
+
+        // Get current user data
+        const user = getLoggedInUser();
+        
+        // Update user data
+        user.name = name;
+        user.phone = phone;
+        if (newPassword) {
+            user.password = newPassword;
+        }
+        setLoggedInUser(user);
+
+        // Update UI
+        $('#profileName').text(name);
+        $('#profileEmail').text(email);
+        
+        // Clear password fields
+        $('#currentPassword, #newPassword, #confirmPassword').val('');
+        $('#passwordStrength').removeClass('weak medium strong');
+        
+        // Show success message
+        showSuccess('Profile updated successfully!');
+
+        // Dispatch event to update other pages
+        window.dispatchEvent(new CustomEvent('profileUpdated', {
+            detail: { email: user.email, name: name, phone: phone }
+        }));
+
+        // Trigger storage event for other tabs
+        localStorage.setItem('lastProfileUpdate', Date.now().toString());
+        
+        hideLoading();
     });
+
+    // Cancel button handler
+    $('#cancelBtn').click(function() {
+        if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+            window.location.href = 'dashboard.html';
+        }
+    });
+
+    // Show success message
+    function showSuccess(message) {
+        const successDiv = $('<div>')
+            .addClass('alert alert-success')
+            .text(message)
+            .css({
+                'position': 'fixed',
+                'top': '20px',
+                'right': '20px',
+                'z-index': '1000',
+                'padding': '15px 25px',
+                'border-radius': '8px',
+                'box-shadow': '0 4px 12px rgba(0,0,0,0.1)',
+                'animation': 'slideIn 0.3s ease-out'
+            });
+
+        $('body').append(successDiv);
+        setTimeout(() => {
+            successDiv.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 3000);
+    }
+
+    // Show error message
+    function showError(message) {
+        const errorDiv = $('<div>')
+            .addClass('alert alert-danger')
+            .text(message)
+            .css({
+                'position': 'fixed',
+                'top': '20px',
+                'right': '20px',
+                'z-index': '1000',
+                'padding': '15px 25px',
+                'border-radius': '8px',
+                'box-shadow': '0 4px 12px rgba(0,0,0,0.1)',
+                'animation': 'slideIn 0.3s ease-out'
+            });
+
+        $('body').append(errorDiv);
+        setTimeout(() => {
+            errorDiv.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 3000);
+    }
+
+    // Add CSS for animations
+    $('<style>')
+        .text(`
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `)
+        .appendTo('head');
 
     // On load
     $(function() {
         loadProfile();
-        $('#profileName, #profileEmail, #profilePassword').prop('disabled', true);
-        $('#saveProfileBtn, #cancelEditBtn').hide();
-        loadUserOrders();
-    });
-
-    function loadUserOrders() {
-        const email = localStorage.getItem('userEmail');
-        const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-        // Filter orders for this user (assuming orderData has a userEmail field)
-        const userOrders = allOrders.filter(order => order.userEmail === email);
-        const $ordersList = $('#ordersList');
-        $ordersList.empty();
-
-        if (userOrders.length === 0) {
-            $ordersList.html('<div class="text-muted text-center">No recent orders found.</div>');
-            return;
-        }
-
-        // Show up to 5 most recent orders
-        userOrders.slice(-5).reverse().forEach(order => {
-            let itemsHtml = order.items.map(i => `<li>${i.name} <span style="color:#888;">x${i.quantity}</span></li>`).join('');
-            $ordersList.append(`
-                <div class="order-card">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="order-id">Order #${order.orderId || 'N/A'}</span>
-                        <span class="order-status">${order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending'}</span>
-                    </div>
-                    <div class="order-date mb-1">${order.orderDate ? new Date(order.orderDate).toLocaleString() : ''}</div>
-                    <div><strong>Items:</strong>
-                        <ul>${itemsHtml}</ul>
-                    </div>
-                    ${order.orderType ? `<div><strong>Type:</strong> ${order.orderType.charAt(0).toUpperCase() + order.orderType.slice(1)}</div>` : ''}
-                    ${order.address ? `<div><strong>Address:</strong> ${order.address}</div>` : ''}
-                    <div><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : ''}</div>
-                </div>
-            `);
+        
+        // Listen for profile updates from other tabs
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'lastProfileUpdate') {
+                loadProfile();
+            }
         });
-    }
+    });
     </script>
 </body>
 </html>

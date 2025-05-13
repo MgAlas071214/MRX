@@ -2,36 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logging Out...</title>
-    <meta http-equiv="refresh" content="3;url=index.html">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f6f6f6;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
+            justify-content: center;
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
         }
-        .logout-box {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        .logout-container {
+            background: #fff;
+            padding: 2rem 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .logout-box h2 {
-            margin-bottom: 10px;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #eee;
+            border-top: 4px solid #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.2rem;
         }
-        .logout-box p {
-            color: #777;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .logout-text {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        @media (max-width: 480px) {
+            .logout-container {
+                padding: 1.2rem 1rem;
+            }
+            .logout-text {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="logout-box">
-        <h2>You have been logged out</h2>
-        <p>Redirecting to login page...</p>
+    <div class="logout-container">
+        <div class="spinner"></div>
+        <div class="logout-text">Logging out...</div>
     </div>
+    <script>
+        // Set logout flag and clear session
+        localStorage.setItem('logout', Date.now());
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userName');
+        // Redirect after a short delay
+        setTimeout(function() {
+            window.location.href = 'index.html';
+        }, 1200);
+        // Listen for logout in other tabs
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'logout') {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 </body>
 </html>

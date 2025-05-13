@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Panel - Restaurant Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --primary: #1976d2;
+            --danger: #c2185b;
+            --success: #2e7d32;
+            --warning: #f57c00;
+            --bg-light: #f8f9fa;
+            --bg-dark: #23272f;
+            --text-dark: #23272f;
+            --text-light: #fff;
+        }
+        body {
+            background: var(--bg-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
+        .manager-navbar {
+            width: 100%;
+            height: 60px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 110;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark-mode .manager-navbar {
+            background: #23272f;
+            color: #fff;
+            border-bottom: 1px solid #333;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .navbar-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--primary);
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .navbar-icon-btn {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.3rem;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            position: relative;
+        }
+        .navbar-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .navbar-profile-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #e9ecef;
+        }
+        .navbar-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 2rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            min-width: 180px;
+            display: none;
+            z-index: 120;
+        }
+        body.dark-mode .navbar-dropdown {
+            background: #23272f;
+            color: #fff;
+        }
+        .navbar-dropdown.show {
+            display: block;
+        }
+        .navbar-dropdown a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: inherit;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .navbar-dropdown a:hover {
+            background: #f5f5f5;
+        }
+        body.dark-mode .navbar-dropdown a:hover {
+            background: #333;
+        }
+        .manager-sidebar {
+            background: #2c3e50;
+            color: #fff;
+            min-height: 100vh;
+            width: var(--sidebar-width);
+            position: fixed;
+            top: 60px;
+            left: 0;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+        .manager-sidebar.collapsed {
+            width: 70px;
+        }
+        .manager-sidebar .logo {
+            text-align: center;
+            padding: 1.5rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .manager-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+        .manager-sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: #ecf0f1;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            font-size: 1.05rem;
+        }
+        .manager-sidebar ul li a:hover,
+        .manager-sidebar ul li a.active {
+            background: #34495e;
+            color: #fff;
+            border-left: 4px solid var(--primary);
+        }
+        .manager-sidebar ul li a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        .manager-sidebar.collapsed ul li a span {
+            display: none;
+        }
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+            padding-top: 80px;
+            transition: margin-left 0.3s;
+        }
+        .manager-sidebar.collapsed ~ .main-content {
+            margin-left: 70px;
+        }
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 15px;
+            z-index: 1000;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        @media (max-width: 992px) {
+            .manager-sidebar {
+                left: -250px;
+            }
+            .manager-sidebar.show {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+        @media (max-width: 576px) {
+            .manager-navbar {
+                padding: 0 0.5rem;
+            }
+            .main-content {
+                padding: 1rem 0.2rem 1rem 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="manager-navbar">
+        <div class="navbar-left">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="uil uil-bars"></i>
+            </button>
+            <span class="navbar-brand">Manager Panel</span>
+        </div>
+        <div class="navbar-right">
+            <button class="navbar-icon-btn" id="notifBtn" title="Notifications">
+                <i class="uil uil-bell"></i>
+                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-1 border border-light rounded-circle d-none" id="notifDot"></span>
+            </button>
+            <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle dark mode">
+                <i class="uil uil-moon"></i>
+            </button>
+            <div class="navbar-profile position-relative" id="profileDropdownBtn">
+                <img src="https://ui-avatars.com/api/?name=Manager" class="navbar-profile-img" id="profileImg" alt="Profile">
+                <span>Manager</span>
+                <i class="uil uil-angle-down"></i>
+                <div class="navbar-dropdown" id="profileDropdown">
+                    <a href="#" id="profileBtn">Profile</a>
+                    <a href="#" id="settingsBtn">Settings</a>
+                    <a href="logout.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="manager-sidebar" id="sidebar">
+        <div class="logo">MP</div>
+        <ul>
+            <li><a href="#" class="active" data-section="overview"><i class="uil uil-dashboard"></i> <span>Overview</span></a></li>
+            <li><a href="#" data-section="users"><i class="uil uil-users-alt"></i> <span>Users</span></a></li>
+            <li><a href="#" data-section="admins"><i class="uil uil-user-md"></i> <span>Admins</span></a></li>
+            <li><a href="#" data-section="settings"><i class="uil uil-setting"></i> <span>Settings</span></a></li>
+            <li><a href="logout.html"><i class="uil uil-signout"></i> <span>Logout</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Section content will be dynamically injected here -->
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <!-- User/Admin Modals -->
+    <div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crudModalLabel">User Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="crudForm">
+                        <input type="hidden" id="crudEmail">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="crudName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="crudEmailInput" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="crudPassword">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="uil uil-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select class="form-control" id="crudRole">
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div id="crudDetails" style="display:none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger d-none" id="deleteBtn">Delete</button>
+                    <button type="button" class="btn btn-primary" id="saveBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="deleteMsg">Are you sure you want to delete this user?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div class="navbar-dropdown" id="notifDropdown" style="right:4rem;top:60px;min-width:260px;">
+        <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+            <span class="fw-bold">Notifications</span>
+            <button class="btn btn-sm btn-link text-danger p-0" id="clearNotifBtn">Clear All</button>
+        </div>
+        <div id="notifList" style="max-height:300px;overflow-y:auto;"></div>
+    </div>
+
+    <!-- Analytics Section (charts will be rendered in Overview) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    // --- Data helpers ---
+    function getUsers() {
+        try {
+            return JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+        } catch { return {}; }
+    }
+    function setUsers(users) {
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+    function getMenuItems() {
+        try {
+            return JSON.parse(localStorage.getItem('menuItems') || '[]');
+        } catch { return []; }
+    }
+    function getOrders() {
+        try {
+            return JSON.parse(localStorage.getItem('orders') || '[]');
+        } catch { return []; }
+    }
+
+    // --- Count-up animation for stat cards ---
+    function animateCount(id, end) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        let start = 0;
+        const duration = 600;
+        const step = Math.ceil(end / (duration / 16));
+        function update() {
+            start += step;
+            if (start >= end) {
+                el.textContent = end;
+            } else {
+                el.textContent = start;
+                requestAnimationFrame(update);
+            }
+        }
+        update();
+    }
+
+    // --- Accessibility helpers ---
+    function focusTrap(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        modal.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                if (e.shiftKey) {
+                    if (document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    }
+                } else {
+                    if (document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            }
+        });
+    }
+
+    // --- Professional Overview Section with analytics export ---
+    function renderOverview() {
+        const users = getUsers();
+        const menuItems = getMenuItems();
+        const orders = getOrders();
+        const totalUsers = Object.keys(users).length;
+        const totalAdmins = 1; // Demo: 1 admin
+        const totalMenuItems = menuItems.length;
+        const totalOrders = orders.length;
+
+        // Best-seller chart data
+        let bestSellers = {};
+        orders.forEach(order => {
+            (order.items || []).forEach(item => {
+                bestSellers[item.name] = (bestSellers[item.name] || 0) + item.quantity;
+            });
+        });
+        const bestSellersArr = Object.entries(bestSellers).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        const chartLabels = bestSellersArr.map(x=>x[0]);
+        const chartData = bestSellersArr.map(x=>x[1]);
+
+        // Order trends (by date)
+        let orderTrends = {};
+        orders.forEach(order => {
+            const d = order.date ? order.date.split('T')[0] : 'Unknown';
+            orderTrends[d] = (orderTrends[d]||0)+1;
+        });
+        const trendLabels = Object.keys(orderTrends).sort();
+        const trendData = trendLabels.map(d=>orderTrends[d]);
+
+        // User growth (by registration date)
+        let userGrowth = {};
+        Object.values(users).forEach(u => {
+            const d = u.registeredAt ? u.registeredAt.split('T')[0] : 'Unknown';
+            userGrowth[d] = (userGrowth[d]||0)+1;
+        });
+        const userGrowthLabels = Object.keys(userGrowth).sort();
+        const userGrowthData = userGrowthLabels.map(d=>userGrowth[d]);
+
+        // Revenue (by order date)
+        let revenue = {};
+        let totalRevenue = 0;
+        orders.forEach(order => {
+            const d = order.date ? order.date.split('T')[0] : 'Unknown';
+            revenue[d] = (revenue[d]||0)+(order.total||0);
+            totalRevenue += (order.total||0);
+        });
+        const revenueLabels = Object.keys(revenue).sort();
+        const revenueData = revenueLabels.map(d=>revenue[d]);
+
+        // Top customers
+        let customerOrders = {};
+        orders.forEach(order => {
+            if(order.userEmail) customerOrders[order.userEmail]=(customerOrders[order.userEmail]||0)+1;
+        });
+        const topCustomersArr = Object.entries(customerOrders).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+        // Recent activity (last 5 orders and last 5 users)
+        const recentOrders = orders.slice(-5).reverse();
+        const recentUsers = Object.entries(users).sort((a,b)=>{
+            return (b[1].registeredAt||'').localeCompare(a[1].registeredAt||'');
+        }).slice(0,5);
+
+        // HTML
+        const html = `
+        <div class="row g-4 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="stats-card text-center shadow-sm animate__animated animate__fadeInDown" style="background: #e3f2fd;">
+                    <div class="stats-icon" style="color: #1976d2;"><i class="uil uil-users-alt"></i></div>
+                    <div class="stats-value" id="statUsers">0</div>
+                    <div class="stats-label">Total Users</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stats-card text-center shadow-sm animate__animated animate__fadeInDown" style="background: #fce4ec;">
+                    <div class="stats-icon" style="color: #c2185b;"><i class="uil uil-user-md"></i></div>
+                    <div class="stats-value" id="statAdmins">0</div>
+                    <div class="stats-label">Total Admins</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stats-card text-center shadow-sm animate__animated animate__fadeInDown" style="background: #e8f5e9;">
+                    <div class="stats-icon" style="color: #2e7d32;"><i class="uil uil-utensils"></i></div>
+                    <div class="stats-value" id="statMenu">0</div>
+                    <div class="stats-label">Menu Items</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stats-card text-center shadow-sm animate__animated animate__fadeInDown" style="background: #fff3e0;">
+                    <div class="stats-icon" style="color: #f57c00;"><i class="uil uil-shopping-bag"></i></div>
+                    <div class="stats-value" id="statOrders">0</div>
+                    <div class="stats-label">Total Orders</div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Best Sellers</h6>
+                        <button class="btn btn-sm btn-outline-secondary" id="exportBestSellers" aria-label="Export best sellers as CSV">Export CSV</button>
+                    </div>
+                    <div class="card-body">${chartLabels.length ? `<canvas id="bestSellerChart" height="120" aria-label="Best Sellers Chart"></canvas>` : '<div class="text-muted">No data available</div>'}</div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Order Trends</h6>
+                        <button class="btn btn-sm btn-outline-secondary" id="exportOrderTrends" aria-label="Export order trends as CSV">Export CSV</button>
+                    </div>
+                    <div class="card-body">${trendLabels.length ? `<canvas id="orderTrendsChart" height="120" aria-label="Order Trends Chart"></canvas>` : '<div class="text-muted">No data available</div>'}</div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">User Growth</h6>
+                        <button class="btn btn-sm btn-outline-secondary" id="exportUserGrowth" aria-label="Export user growth as CSV">Export CSV</button>
+                    </div>
+                    <div class="card-body">${userGrowthLabels.length ? `<canvas id="userGrowthChart" height="120" aria-label="User Growth Chart"></canvas>` : '<div class="text-muted">No data available</div>'}</div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Revenue</h6>
+                        <span class="fw-bold">₱${totalRevenue.toLocaleString()}</span>
+                        <button class="btn btn-sm btn-outline-secondary" id="exportRevenue" aria-label="Export revenue as CSV">Export CSV</button>
+                    </div>
+                    <div class="card-body">${revenueLabels.length ? `<canvas id="revenueChart" height="120" aria-label="Revenue Chart"></canvas>` : '<div class="text-muted">No data available</div>'}</div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Top Customers</h6>
+                    </div>
+                    <div class="card-body">
+                        <ol class="mb-0">
+                            ${topCustomersArr.length ? topCustomersArr.map(([email, count])=>`<li>${email} <span class="badge bg-primary ms-2">${count} orders</span></li>`).join('') : '<li>No data</li>'}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Recent Activity</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0" aria-label="Recent Activity Table">
+                                <thead><tr><th>Type</th><th>User/Order</th><th>Date</th></tr></thead>
+                                <tbody>
+                                    ${recentUsers.length ? recentUsers.map(([email, user]) => `
+                                        <tr tabindex="0"><td><span class="badge bg-info">User</span></td><td>${user.name||'User'}<br><small>${email}</small></td><td>${user.registeredAt ? user.registeredAt.split('T')[0] : ''}</td></tr>
+                                    `).join('') : ''}
+                                    ${recentOrders.length ? recentOrders.map(order => `
+                                        <tr tabindex="0"><td><span class="badge bg-warning">Order</span></td><td>${order.userEmail||'N/A'}<br><small>#${order.id||''}</small></td><td>${order.date ? order.date.split('T')[0] : ''}</td></tr>
+                                    `).join('') : ''}
+                                    ${(recentUsers.length+recentOrders.length===0) ? '<tr><td colspan="3" class="text-center text-muted">No recent activity</td></tr>' : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        $('#mainContent').html(html);
+        animateCount('statUsers', totalUsers);
+        animateCount('statAdmins', totalAdmins);
+        animateCount('statMenu', totalMenuItems);
+        animateCount('statOrders', totalOrders);
+        setTimeout(()=>{
+            if(window.bestSellerChart) window.bestSellerChart.destroy();
+            if(window.orderTrendsChart) window.orderTrendsChart.destroy();
+            if(window.userGrowthChart) window.userGrowthChart.destroy();
+            if(window.revenueChart) window.revenueChart.destroy();
+            if(chartLabels.length) window.bestSellerChart = new Chart(document.getElementById('bestSellerChart').getContext('2d'), {
+                type: 'bar', data: {labels: chartLabels, datasets: [{label: 'Sold', data: chartData, backgroundColor: '#1976d2'}]}, options: {responsive:true, plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+            });
+            if(trendLabels.length) window.orderTrendsChart = new Chart(document.getElementById('orderTrendsChart').getContext('2d'), {
+                type: 'line', data: {labels: trendLabels, datasets: [{label: 'Orders', data: trendData, borderColor: '#f57c00', backgroundColor: 'rgba(245,124,0,0.1)'}]}, options: {responsive:true, plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+            });
+            if(userGrowthLabels.length) window.userGrowthChart = new Chart(document.getElementById('userGrowthChart').getContext('2d'), {
+                type: 'line', data: {labels: userGrowthLabels, datasets: [{label: 'New Users', data: userGrowthData, borderColor: '#1976d2', backgroundColor: 'rgba(25,118,210,0.1)'}]}, options: {responsive:true, plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+            });
+            if(revenueLabels.length) window.revenueChart = new Chart(document.getElementById('revenueChart').getContext('2d'), {
+                type: 'line', data: {labels: revenueLabels, datasets: [{label: 'Revenue', data: revenueData, borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.1)'}]}, options: {responsive:true, plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+            });
+        }, 100);
+        // Export analytics as CSV
+        $('#exportBestSellers').on('click', function() {
+            let csv = 'Item,Quantity\n';
+            bestSellersArr.forEach(([name, qty]) => { csv += `${name},${qty}\n`; });
+            exportCSV(csv, 'best_sellers.csv');
+        });
+        $('#exportOrderTrends').on('click', function() {
+            let csv = 'Date,Orders\n';
+            trendLabels.forEach((d,i) => { csv += `${d},${trendData[i]}\n`; });
+            exportCSV(csv, 'order_trends.csv');
+        });
+        $('#exportUserGrowth').on('click', function() {
+            let csv = 'Date,New Users\n';
+            userGrowthLabels.forEach((d,i) => { csv += `${d},${userGrowthData[i]}\n`; });
+            exportCSV(csv, 'user_growth.csv');
+        });
+        $('#exportRevenue').on('click', function() {
+            let csv = 'Date,Revenue\n';
+            revenueLabels.forEach((d,i) => { csv += `${d},${revenueData[i]}\n`; });
+            exportCSV(csv, 'revenue.csv');
+        });
+    }
+    function exportCSV(csv, filename) {
+        const blob = new Blob([csv], {type:'text/csv'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // --- Users Section ---
+    function renderUsers() {
+        const users = getUsers();
+        let html = `
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h4 class="mb-0">Users Management</h4>
+            <div class="d-flex gap-2 flex-wrap">
+                <input type="text" class="form-control" id="userSearch" placeholder="Search users..." style="max-width:200px;">
+                <button class="btn btn-primary" id="addUserBtn"><i class="uil uil-plus"></i> Add User</button>
+                <button class="btn btn-outline-secondary" id="exportUsersBtn"><i class="uil uil-export"></i> Export CSV</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="usersTable">
+                <thead><tr>
+                    <th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+                </tr></thead>
+                <tbody>
+                    ${Object.entries(users).map(([email, user]) => `
+                    <tr>
+                        <td><div class="d-flex align-items-center"><div class="user-avatar me-2">${user.name ? user.name.charAt(0).toUpperCase() : email.charAt(0).toUpperCase()}</div>${user.name || 'User'}</div></td>
+                        <td>${email}</td>
+                        <td><span class="badge bg-primary">${user.role || 'User'}</span></td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-light border me-1" onclick="editUserModal('${email}')"><i class="uil uil-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteUserModal('${email}')"><i class="uil uil-trash"></i></button>
+                        </td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination placeholder -->
+        <nav><ul class="pagination justify-content-end" id="usersPagination"></ul></nav>
+        `;
+        $('#mainContent').html(html);
+        // Search
+        $('#userSearch').on('input', function() {
+            const val = $(this).val().toLowerCase();
+            $('#usersTable tbody tr').each(function() {
+                $(this).toggle($(this).text().toLowerCase().includes(val));
+            });
+        });
+        // Add User
+        $('#addUserBtn').on('click', function() { showUserModal(); });
+        // Export
+        $('#exportUsersBtn').on('click', function() { exportUsersCSV(); });
+    }
+    function showUserModal(email) {
+        // Show modal for add/edit user (implement modal HTML and logic)
+        alert(email ? 'Edit user: '+email : 'Add new user (modal to be implemented)');
+    }
+    function editUserModal(email) { showUserModal(email); }
+    function deleteUserModal(email) {
+        if(confirm('Delete user '+email+'?')) {
+            const users = getUsers();
+            delete users[email];
+            setUsers(users);
+            renderUsers();
+            showToast('User deleted','success');
+        }
+    }
+    function exportUsersCSV() {
+        const users = getUsers();
+        let csv = 'Name,Email,Role\n';
+        Object.entries(users).forEach(([email, user]) => {
+            csv += `${user.name || ''},${email},${user.role || 'User'}\n`;
+        });
+        const blob = new Blob([csv], {type:'text/csv'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'users.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // --- Admins Section ---
+    function renderAdmins() {
+        let html = `
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h4 class="mb-0">Admins Management</h4>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-primary" id="addAdminBtn"><i class="uil uil-plus"></i> Add Admin</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="adminsTable">
+                <thead><tr>
+                    <th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+                </tr></thead>
+                <tbody>
+                    <tr>
+                        <td><div class="d-flex align-items-center"><div class="user-avatar me-2"><i class="uil uil-user-md"></i></div>Admin</div></td>
+                        <td>admin@restaurant.com</td>
+                        <td><span class="badge bg-danger">Admin</span></td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-light border me-1" onclick="editAdminModal('admin@restaurant.com')"><i class="uil uil-edit"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        `;
+        $('#mainContent').html(html);
+        $('#addAdminBtn').on('click', function() { showAdminModal(); });
+    }
+    function showAdminModal(email) {
+        alert(email ? 'Edit admin: '+email : 'Add new admin (modal to be implemented)');
+    }
+    function editAdminModal(email) { showAdminModal(email); }
+
+    // --- Settings/Profile Section ---
+    function renderSettings() {
+        let html = `
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-header"><h5>Manager Profile</h5></div>
+                    <div class="card-body">
+                        <form id="profileForm">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="profileName" value="Manager">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="profileEmail" value="admin@restaurant.com" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" id="profilePassword" placeholder="Change password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        $('#mainContent').html(html);
+        $('#profileForm').on('submit', function(e) {
+            e.preventDefault();
+            showToast('Profile updated','success');
+        });
+    }
+
+    // --- Section loader ---
+    function loadSection(section) {
+        if (section === 'overview') renderOverview();
+        else if (section === 'users') renderUsers();
+        else if (section === 'admins') renderAdmins();
+        else if (section === 'settings') renderSettings();
+    }
+
+    // --- Initial load ---
+    $(document).ready(function() {
+        loadSection('overview');
+    });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar toggle for mobile/collapsed
+        function toggleSidebar() {
+            $('#sidebar').toggleClass('show');
+        }
+        // Collapsible sidebar for desktop
+        let sidebarCollapsed = false;
+        $(document).on('dblclick', '.manager-sidebar', function() {
+            sidebarCollapsed = !sidebarCollapsed;
+            $(this).toggleClass('collapsed', sidebarCollapsed);
+            if (sidebarCollapsed) {
+                $('.main-content').css('margin-left', '70px');
+            } else {
+                $('.main-content').css('margin-left', '250px');
+            }
+        });
+        // Navbar profile dropdown
+        $('#profileDropdownBtn').on('click', function(e) {
+            e.stopPropagation();
+            $('#profileDropdown').toggleClass('show');
+        });
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('#profileDropdownBtn').length) {
+                $('#profileDropdown').removeClass('show');
+            }
+            if ($(window).width() <= 992) {
+                if (!$(e.target).closest('.manager-sidebar').length && !$(e.target).closest('.sidebar-toggle').length) {
+                    $('#sidebar').removeClass('show');
+                }
+            }
+        });
+        // Dark mode toggle
+        $('#darkModeToggle').on('click', function() {
+            $('body').toggleClass('dark-mode');
+            $(this).find('i').toggleClass('uil-moon uil-sun');
+        });
+        // Sidebar navigation
+        $('.manager-sidebar ul li a').on('click', function(e) {
+            e.preventDefault();
+            $('.manager-sidebar ul li a').removeClass('active');
+            $(this).addClass('active');
+            const section = $(this).data('section');
+            loadSection(section);
+        });
+    </script>
+</body>
+</html> 

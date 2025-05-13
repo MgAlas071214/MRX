@@ -292,13 +292,26 @@
             
             <form id="loginForm" class="auth-form">
                 <div class="form-group animate__animated animate__fadeIn animate__delay-1s">
+                    <label for="role">Login as</label>
+                    <select id="role" name="role" class="form-control" required>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+                <div class="form-group animate__animated animate__fadeIn animate__delay-1s">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
                     <span class="error-message">Please enter a valid email</span>
                 </div>
                 <div class="form-group animate__animated animate__fadeIn animate__delay-1s">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required minlength="6">
+                    <div style="position:relative;">
+                        <input type="password" id="password" name="password" required minlength="6" style="padding-right:40px;">
+                        <span id="togglePassword" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);cursor:pointer;">
+                            <i class="uil uil-eye" aria-label="Show password" tabindex="0"></i>
+                        </span>
+                    </div>
                     <span class="error-message">Password must be at least 6 characters</span>
                 </div>
                 <div class="remember-forgot animate__animated animate__fadeIn animate__delay-2s">
@@ -311,7 +324,7 @@
                 <button type="submit" class="auth-btn animate__animated animate__fadeInUp animate__delay-2s">Login</button>
             </form>
             
-            <div class="auth-footer animate__animated animate__fadeIn animate__delay-3s">
+            <div class="auth-footer animate__animated animate__fadeIn animate__delay-3s" id="registerFooter">
                 Don't have an account? <a href="register.html">Register here</a>
             </div>
         </div>
@@ -323,7 +336,10 @@
         $(document).ready(function () {
             // Redirect if already logged in
             if (localStorage.getItem('isLoggedIn') === 'true') {
-                window.location.href = 'dashboard.html';
+                const role = localStorage.getItem('userRole') || 'user';
+                if (role === 'admin') window.location.href = 'admin.html';
+                else if (role === 'manager') window.location.href = 'manager.html';
+                else window.location.href = 'dashboard.html';
             }
     
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -339,6 +355,15 @@
                 $('#email').val(localStorage.getItem('userEmail'));
                 $('#remember').prop('checked', true);
             }
+    
+            // Hide register link for admin/manager
+            $('#role').on('change', function() {
+                if ($(this).val() === 'user') {
+                    $('#registerFooter').show();
+                } else {
+                    $('#registerFooter').hide();
+                }
+            }).trigger('change');
     
             // Real-time validation
             $('#email').on('input', function () {
@@ -360,6 +385,7 @@
                 $('.form-group').removeClass('error');
                 let isValid = true;
     
+                const role = $('#role').val();
                 const email = $('#email').val().trim();
                 const password = $('#password').val();
                 const remember = $('#remember').is(':checked');
@@ -376,46 +402,88 @@
     
                 if (!isValid) return;
     
-                // Fetch all registered users
-                let registeredUsers = {};
-                try {
-                    registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || {};
-                } catch (e) {
-                    showMessage('User data corrupted. Please register again.', 'error');
-                    return;
+                // User login
+                if (role === 'user') {
+                    let registeredUsers = {};
+                    try {
+                        registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || {};
+                    } catch (e) {
+                        showMessage('User data corrupted. Please register again.', 'error');
+                        return;
+                    }
+                    if (!registeredUsers[email]) {
+                        showMessage('Email not registered. Redirecting to registration...', 'error');
+                        setTimeout(() => window.location.href = 'register.html', 2000);
+                        return;
+                    }
+                    if (registeredUsers[email].password !== password) {
+                        $('#password').closest('.form-group').addClass('error');
+                        showMessage('Incorrect password.', 'error');
+                        return;
+                    }
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userRole', 'user');
+                    if (remember) {
+                        localStorage.setItem('rememberMe', 'true');
+                    } else {
+                        localStorage.removeItem('rememberMe');
+                    }
+                    showMessage('Login successful! Redirecting to dashboard...', 'success');
+                    $('#authCard').addClass('hide');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else if (role === 'admin') {
+                    // Hardcoded admin
+                    if (email === 'admin@restaurant.com' && password === 'admin123') {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('userEmail', email);
+                        localStorage.setItem('userRole', 'admin');
+                        showMessage('Login successful! Redirecting to admin panel...', 'success');
+                        $('#authCard').addClass('hide');
+                        setTimeout(() => {
+                            window.location.href = 'admin.html';
+                        }, 1500);
+                    } else {
+                        showMessage('Invalid admin credentials.', 'error');
+                        $('#password').closest('.form-group').addClass('error');
+                    }
+                } else if (role === 'manager') {
+                    // Hardcoded manager
+                    if (email === 'manager@restaurant.com' && password === 'manager123') {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('userEmail', email);
+                        localStorage.setItem('userRole', 'manager');
+                        showMessage('Login successful! Redirecting to manager panel...', 'success');
+                        $('#authCard').addClass('hide');
+                        setTimeout(() => {
+                            window.location.href = 'manager.html';
+                        }, 1500);
+                    } else {
+                        showMessage('Invalid manager credentials.', 'error');
+                        $('#password').closest('.form-group').addClass('error');
+                    }
                 }
-    
-                // Validate if user exists
-                if (!registeredUsers[email]) {
-                    showMessage('Email not registered. Redirecting to registration...', 'error');
-                    setTimeout(() => window.location.href = 'register.html', 2000);
-                    return;
-                }
-    
-                // Validate password
-                if (registeredUsers[email].password !== password) {
-                    $('#password').closest('.form-group').addClass('error');
-                    showMessage('Incorrect password.', 'error');
-                    return;
-                }
-    
-                // Set login session
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-    
-                if (remember) {
-                    localStorage.setItem('rememberMe', 'true');
-                } else {
-                    localStorage.removeItem('rememberMe');
-                }
-    
-                showMessage('Login successful! Redirecting to dashboard...', 'success');
-                $('#authCard').addClass('hide');
-    
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
             });
+    
+            // Password show/hide toggle
+            $('#togglePassword').on('click keydown', function(e) {
+                if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
+                    const input = $('#password');
+                    const icon = $(this).find('i');
+                    if (input.attr('type') === 'password') {
+                        input.attr('type', 'text');
+                        icon.removeClass('uil-eye').addClass('uil-eye-slash');
+                        icon.attr('aria-label', 'Hide password');
+                    } else {
+                        input.attr('type', 'password');
+                        icon.removeClass('uil-eye-slash').addClass('uil-eye');
+                        icon.attr('aria-label', 'Show password');
+                    }
+                }
+            });
+            $('#togglePassword').attr('tabindex', 0);
         });
     
         // Message utility
